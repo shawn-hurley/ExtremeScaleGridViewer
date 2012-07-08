@@ -103,7 +103,6 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 		add(KeyPanel,c);
 		
 		//Put componets in ListOfValues
-		fillLisOfValuesPanel();
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 1;
 		c.gridy= 1;
@@ -230,10 +229,34 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 		
 		if (ACTION_CALCULATE.equals(e.getActionCommand())){
 			//JOptionPane.showMessageDialog(submitButton, "hello world");
+			GridBagConstraints c = new GridBagConstraints();
 			String inputs[] = {classLookingfor.getText(), ValueClass.getText(), Grid_endpt.getText(), Grid_Name.getText()};
-			//Obejct = getobject()
-			//string = testing(Object)
-			//FillValuesPanel(string)
+			try {
+				fillLisOfValuesPanel();
+			} catch (IllegalArgumentException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SecurityException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IllegalAccessException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InvocationTargetException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (NoSuchMethodException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			c.fill = GridBagConstraints.VERTICAL;
+			c.gridx = 1;
+			c.gridy= 1;
+			ListOfValuesPanel.setBackground(Color.BLUE);
+			add(ListOfValuesPanel,c);
 		}
 	}
 	public void fillKeyPanel(){
@@ -267,8 +290,6 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 	private GridBagConstraints choosewhattodo(String string){
 		GridBagConstraints c = new GridBagConstraints();	
 		return c;
-		
-		
 		//Some interesting stuff here, We have to wait for the XML file to be transfered here and then we will have to build the panel, I am thinking sometime of event listener
 
 	}

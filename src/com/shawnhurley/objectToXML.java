@@ -83,48 +83,6 @@ public class objectToXML {
 		Method method = c.getDeclaredMethod(name, null);
 		return method;
 	}
-	public static void main(String[] args) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException{
-		Foo newfoo = new Foo();
-		StringBuffer sb = null;
-		sb = reflection(newfoo, sb);
-		final MySAXApp handler = attempts(sb.toString());
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				JFrame frame = new JFrame("GridViewer");
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				
-				//add contents to the window
-				frame.add(handler.getTestPanel());
-				
-				//Display the window
-				frame.pack();
-				
-				frame.setVisible(true);
-			}
-		});
-		try {
-			sb = reflection(newfoo, sb);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(sb.toString());
-	}
 	public static MySAXApp attempts(String sb) throws IOException{
 		ByteArrayInputStream inputstream = new ByteArrayInputStream(sb.getBytes());
 		try {
