@@ -48,7 +48,6 @@ public class MySAXApp extends DefaultHandler {
 		if (qName == "objectfield" && countobjectfield >= 1){
 			elementName = qName;
 			yvalue++;
-			
 		}
 		else{
 			elementName = qName;
@@ -60,7 +59,8 @@ public class MySAXApp extends DefaultHandler {
     public void endElement (String uri, String name, String qName)
     {
     	if(qName == "objectfield"){
-    		yvalue--;
+    		yvalue++;
+    		xvalue++;
     	}
     }
 
