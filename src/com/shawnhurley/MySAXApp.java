@@ -1,6 +1,7 @@
 package com.shawnhurley;
 
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -21,7 +22,7 @@ public class MySAXApp extends DefaultHandler {
 	}
     public void startDocument ()
     {
-    	testPanel= new JPanel();
+    	testPanel= new JPanel(new GridBagLayout());
     	yvalue = 0;
     	xvalue = 0;
     }
@@ -78,8 +79,8 @@ public class MySAXApp extends DefaultHandler {
     		}
     		System.out.println();
     		c.fill = GridBagConstraints.HORIZONTAL;
-    		c.gridx = 1;
-    		c.gridy = 0;
+    		c.gridx = xvalue;
+    		c.gridy = yvalue;
     		JLabel testLabel = new JLabel(sb.toString());
     		testPanel.add(testLabel,c);
     	}
@@ -90,8 +91,8 @@ public class MySAXApp extends DefaultHandler {
 				sb.append(ch[i]);
 			}
     		c.fill = GridBagConstraints.HORIZONTAL;
-    		c.gridx=2;
-    		c.gridy=0;
+    		c.gridx=xvalue;
+    		c.gridy=yvalue;
     		JFormattedTextField testField = new JFormattedTextField(sb.toString());
     		testPanel.add(testField,c);
     		xvalue++;
