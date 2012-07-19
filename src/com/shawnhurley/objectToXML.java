@@ -29,7 +29,7 @@ public class objectToXML {
 		sb.append("<objectfield>");
 		Class<? extends Object> c = thing.getClass();
 		if(firstTimeThrough){
-		sb.append("<name>"+"Value Class is: "+c.toString()+"</name>");
+		sb.append("<name>"+c.toString()+"</name>");
 		}
 		//PrintWriter prntwriter = new PrintWriter("NewFile");
 		Field newFields[]= c.getDeclaredFields();
@@ -38,6 +38,7 @@ public class objectToXML {
 			Field aField = newFields[i];
 			String typeField = aField.getType().toString();
 			if(typeField.startsWith("class ")){
+				int INDEX_WHERE_CLASSNAME_BEGINS = 6;	
 				if(typeField.endsWith("java.lang.String")){
 					sb.append("<stringfield>");
 					sb.append("<name>"+aField.getName()+"</name>");
@@ -47,6 +48,22 @@ public class objectToXML {
 			        sb.append("</value>");
 			        sb.append("</stringfield>");
 				}
+				else if (typeField.endsWith("java.util.Date") || typeField.endsWith("java.lang.Byte")
+						|| typeField.endsWith("java.lang.Short") || typeField.endsWith("java.lang.Integer") || typeField.endsWith("java.lang.Long") || 
+						typeField.endsWith("java.lang.Float") || typeField.endsWith("java.lang.Double") || typeField.endsWith("java.lang.Character") || typeField.endsWith("Boolean")) {
+					String className = typeField.substring(INDEX_WHERE_CLASSNAME_BEGINS).replace(".", "");
+					sb.append("<" + className + "field>");
+					sb.append("<name>"+aField.getName()+"</name>");
+					sb.append("<value>");
+					Method method = getMethod(aField, c);
+			        sb.append(method.invoke(thing, null).toString());
+			        sb.append("</value>");
+					sb.append("</" + className + "field>");
+				}
+				else if (typeField.endsWith("java.util.GregorianCalendar")) {
+					
+				}
+					
 				else{
 					Method method = getMethod(aField, c);
 					sb.append("<name>"+aField.getName()+"</name>");

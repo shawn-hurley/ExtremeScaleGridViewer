@@ -284,6 +284,7 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 		Foo newfoo = new Foo();
 		StringBuffer sb = null;
 		sb = objectToXML.reflection(newfoo, sb);
+		System.out.print(sb.toString());
 		final MySAXApp handler = objectToXML.attempts(sb.toString());
 		ListOfValuesPanel = handler.getTestPanel();
 }		
