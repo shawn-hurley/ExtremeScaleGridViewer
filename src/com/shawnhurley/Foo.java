@@ -10,6 +10,7 @@ public class Foo {
 	private String Testing = "Testing thirteen";
 	@SuppressWarnings("deprecation")
 	private Date date = new Date(86, 12, 19);
+	private GregorianCalendar datetry = new GregorianCalendar(1990, 6, 22);
 	private Integer somewhittyname = 1234;
 	public int getHello() {
 		return hello;
@@ -46,6 +47,12 @@ public class Foo {
 	}
 	public void setSomewhittyname(Integer somewhittyname) {
 		this.somewhittyname = somewhittyname;
+	}
+	public GregorianCalendar getDatetry() {
+		return datetry;
+	}
+	public void setDatetry(GregorianCalendar datetry) {
+		this.datetry = datetry;
 	}
 
 	

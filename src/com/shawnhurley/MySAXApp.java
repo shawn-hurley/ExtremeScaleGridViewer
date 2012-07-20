@@ -30,7 +30,6 @@ public class MySAXApp extends DefaultHandler {
 
     public void startElement (String uri, String name, String qName, Attributes attributes)
     {
-    	System.out.println(name + " "+ qName + " "+ attributes);
     	if (qName == "objectfield" && countobjectfield==0){
 			countobjectfield++; //counts the object field so that we can indent later ones
 		}
@@ -77,7 +76,6 @@ public class MySAXApp extends DefaultHandler {
     		for (int i = start; i < start+ length; i++) {
     			 	sb.append(ch[i]);
     		}
-    		System.out.println();
     		c.fill = GridBagConstraints.HORIZONTAL;
     		c.gridx = xvalue;
     		c.gridy = yvalue;

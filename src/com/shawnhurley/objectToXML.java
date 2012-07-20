@@ -1,6 +1,7 @@
 package com.shawnhurley;
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.GregorianCalendar;
 
 import javax.swing.*;
 import org.xml.sax.*;
@@ -31,7 +32,6 @@ public class objectToXML {
 		if(firstTimeThrough){
 		sb.append("<name>"+c.toString()+"</name>");
 		}
-		//PrintWriter prntwriter = new PrintWriter("NewFile");
 		Field newFields[]= c.getDeclaredFields();
 		sb.append("<fields>");
 		for(i=0; i<newFields.length; i++){	
@@ -61,7 +61,15 @@ public class objectToXML {
 					sb.append("</" + className + "field>");
 				}
 				else if (typeField.endsWith("java.util.GregorianCalendar")) {
-					
+					String className = typeField.substring(INDEX_WHERE_CLASSNAME_BEGINS).replace(".", "");
+					sb.append("<" + className + "field>");
+					sb.append("<name>"+aField.getName()+"</name>");
+					sb.append("<value>");
+					Method method = getMethod(aField, c);
+					sb.append((((java.util.GregorianCalendar) method.invoke(thing, null)).getTime()));
+					sb.append("</value>");
+					sb.append("</" + className + "field>");
+
 				}
 					
 				else{
@@ -88,7 +96,6 @@ public class objectToXML {
 		}
 		sb.append("</fields>");
 		sb.append("</objectfield>");
-		//System.out.println(sb);
 		return sb;
 	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })

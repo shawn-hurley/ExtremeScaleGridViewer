@@ -1,21 +1,14 @@
 package com.shawnhurley;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.text.NumberFormat;
-import java.util.Properties;
-import java.util.Scanner;
-
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -23,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class GridViewerGUI extends JPanel implements ActionListener{
+public class GridBrowserGUI extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	 private static final String ACTION_CALCULATE = "Calculate"; 
 	
@@ -36,8 +29,6 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 	private JLabel ValueClassLabel;
 	private JLabel Grid_End_Pointslabel;
 	private JLabel Grid_Namelabel;
-	private JLabel ListOfValuesPanelLabel;
-	
 	//JPanels in which we the sub-areas of our GUI
 	private JPanel EntryTitlePanel;
 	//private JPanel ResultTitlePanel;
@@ -54,14 +45,15 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 	private JFormattedTextField ValueClass;
 	private JFormattedTextField Grid_endpt;
 	private JFormattedTextField Grid_Name;
-	private JButton submitButton;
+	private JButton getButton;
+	private JButton updateButton;
 	//************ Need to add more here, attempting to make the first screen first*******/
 	
 	//Formats to format and parse numbers
 	//private NumberFormat integerFormat = NumberFormat.getIntegerInstance();
 	
 	
-	public GridViewerGUI() throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException {
+	public GridBrowserGUI() throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException {
 		//set that we are a grid layout type of JPanel
 		super(new GridBagLayout());
 		
@@ -83,7 +75,7 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 		//c.anchor = GridBagConstraints.VERTICAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		EntryTitlePanel.setBackground(Color.pink);
+		EntryTitlePanel.setBackground(Color.WHITE);
 		add(EntryTitlePanel,c);
 		
 		//Put Componentes within requiredInputPanel, then place it in main panel ("this")
@@ -99,7 +91,7 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx=0;
 		c.gridy=1;
-		KeyPanel.setBackground(Color.green);
+		KeyPanel.setBackground(Color.lightGray);
 		add(KeyPanel,c);
 		
 		//Put componets in ListOfValues
@@ -129,7 +121,7 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 		c.fill = GridBagConstraints.CENTER;
 		c.gridx = 0;
 		c.gridy = 0;
-		EntryTitleLabel = new JLabel("IBM Grid Viewer");
+		EntryTitleLabel = new JLabel("IBM Grid Browser");
 		EntryTitlePanel.add(EntryTitleLabel, c);
 //		
 //		//Add the text field
@@ -159,7 +151,8 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx=1;
 		c.gridy=0;
-		classLookingfor = new JFormattedTextField("Key_Class_Want");
+		classLookingfor = new JFormattedTextField();
+		classLookingfor.setColumns(10);
 		classLookingfor.setEditable(true);
 		requiredInputPanel.add(classLookingfor, c);
 		
@@ -174,8 +167,9 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx=1;
 		c.gridy=1;
-		ValueClass = new JFormattedTextField("Value_Class_want");
+		ValueClass = new JFormattedTextField();
 		ValueClass.setEditable(true);
+		ValueClass.setColumns(10);
 		requiredInputPanel.add(ValueClass, c);
 		
 		//add label for Catalog end points
@@ -188,8 +182,9 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx=1;
 		c.gridy=2;
-		Grid_endpt = new JFormattedTextField("Grid_End_Points");
+		Grid_endpt = new JFormattedTextField();
 		Grid_endpt.setEditable(true);
+		Grid_endpt.setColumns(10);
 		requiredInputPanel.add(Grid_endpt, c);
 		//add label for grid name
 		c.fill = GridBagConstraints.VERTICAL;
@@ -202,35 +197,41 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx=1;
 		c.gridy=3;
-		Grid_Name = new JFormattedTextField("Grid_Name_Want");
+		Grid_Name = new JFormattedTextField();
 		Grid_Name.setEditable(true);
+		Grid_Name.setColumns(10);
 		requiredInputPanel.add(Grid_Name, c);
 		
 		//Add the submit button
-	    submitButton = new JButton("Submit");
-	    Font cf = submitButton.getFont();
+	    getButton = new JButton("Get");
+	    updateButton = new JButton("Update");
+	    Font cf = getButton.getFont();
 	    Font buttonFont = new Font(cf.getName(), cf.getStyle(), 12);
-	    submitButton.setFont(buttonFont);
-	    submitButton.setVerticalTextPosition(AbstractButton.CENTER);
-	    submitButton.setHorizontalTextPosition(AbstractButton.CENTER); //aka LEFT, for left-to-right locales
-//	    calcButton.setMnemonic(KeyEvent.VK_ENTER);
-	    submitButton.setEnabled(true);
-	    submitButton.setActionCommand(ACTION_CALCULATE);
-	    //Listen for actions on buttons 1 and 3.
-	    submitButton.addActionListener(this);
+	    updateButton.setFont(buttonFont);
+	    getButton.setFont(buttonFont);
+	    getButton.setVerticalTextPosition(AbstractButton.CENTER);
+	    getButton.setHorizontalTextPosition(AbstractButton.CENTER); //aka LEFT, for left-to-right locales
+	    getButton.setEnabled(true);
+	    getButton.setActionCommand(ACTION_CALCULATE);
+	    getButton.addActionListener(this);
 	    c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 4;
-	    requiredInputPanel.add(submitButton, c);
+	    requiredInputPanel.add(getButton, c);
+	    updateButton.setEnabled(true);
+	    updateButton.addActionListener(this);
+	    c.fill = GridBagConstraints.HORIZONTAL;
+	    c.gridx = 1;
+	    c.gridy= 4;
+	    requiredInputPanel.add(updateButton, c);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
 		if (ACTION_CALCULATE.equals(e.getActionCommand())){
-			//JOptionPane.showMessageDialog(submitButton, "hello world");
+			//JOptionPane.showMessageDialog(getButton, "hello world");
 			GridBagConstraints c = new GridBagConstraints();
-			String inputs[] = {classLookingfor.getText(), ValueClass.getText(), Grid_endpt.getText(), Grid_Name.getText()};
 			try {
 				fillLisOfValuesPanel();
 			} catch (IllegalArgumentException e1) {
@@ -252,6 +253,27 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			String name = KeyPanelTextField.getText();
+			try {
+				Class<?> cl = Class.forName(name);
+				@SuppressWarnings({ "rawtypes" })
+				Constructor[] co = cl.getConstructors();
+				@SuppressWarnings("rawtypes")
+				Constructor picked = (Constructor)JOptionPane.showInputDialog(classLookingfor, "Pick a Constructor", "ComboBox Dialog", JOptionPane.QUESTION_MESSAGE
+		                , null, co, co[0]);
+				@SuppressWarnings({ "rawtypes" })
+				Class[] something = picked.getParameterTypes();
+				for (int i = 0; i < something.length; i++) {
+					System.out.println(something[i]);
+				}
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SecurityException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 			c.fill = GridBagConstraints.VERTICAL;
 			c.gridx = 1;
 			c.gridy= 1;
@@ -279,19 +301,12 @@ public class GridViewerGUI extends JPanel implements ActionListener{
 		KeyPanel.add(KeyPanelTextField,c);
 	}
 	public void fillLisOfValuesPanel() throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException{
-		GridBagConstraints c = new GridBagConstraints();
+		new GridBagConstraints();
 		//will use the XMLReader and call MySAXApp to return the panel
 		Foo newfoo = new Foo();
 		StringBuffer sb = null;
 		sb = objectToXML.reflection(newfoo, sb);
-		System.out.print(sb.toString());
 		final MySAXApp handler = objectToXML.attempts(sb.toString());
 		ListOfValuesPanel = handler.getTestPanel();
-}		
-	private GridBagConstraints choosewhattodo(String string){
-		GridBagConstraints c = new GridBagConstraints();	
-		return c;
-		//Some interesting stuff here, We have to wait for the XML file to be transfered here and then we will have to build the panel, I am thinking sometime of event listener
-
-	}
+}
 }

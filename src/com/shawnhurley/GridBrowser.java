@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JFrame;
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
+import java.awt.Color;
 
-public class GridViewer {
+public class GridBrowser {
 	public static void main(String Args[]){
 		// create an instance of our GUI and run it
 		
@@ -32,7 +35,9 @@ public class GridViewer {
 		
 		//Add contents to the window.
 		try {
-			frame.add(new GridViewerGUI());
+			GridBrowserGUI gridViewerGUI = new GridBrowserGUI();
+			gridViewerGUI.setForeground(Color.WHITE);
+			frame.getContentPane().add(gridViewerGUI, BorderLayout.NORTH);
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
