@@ -264,7 +264,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				@SuppressWarnings({ "rawtypes" })
 				Class[] something = picked.getParameterTypes();
 				for (int i = 0; i < something.length; i++) {
-					System.out.println(something[i]);
+					System.out.print(something[i].toString());
 				}
 			} catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block

@@ -5,8 +5,17 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
+import javax.swing.plaf.metal.DefaultMetalTheme;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.MetalTheme;
+import javax.swing.plaf.metal.OceanTheme;
+import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
+
 import java.awt.Color;
 
 public class GridBrowser {
@@ -30,6 +39,14 @@ public class GridBrowser {
 	
 	public static void createAndShowGUI() throws FileNotFoundException {
 		//create and set up the window
+		try {
+			MetalLookAndFeel.setCurrentTheme(new OceanTheme());
+			UIManager.setLookAndFeel(new com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel());
+			
+		} catch (UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		JFrame frame = new JFrame("GridViewer");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
