@@ -70,8 +70,6 @@ public class MySAXApp extends DefaultHandler {
     		
     	}
     	if(elementName == "name"){
-    		String thing = null;
-    		//String thing = ch.toString();
     		StringBuffer sb = new StringBuffer();
     		for (int i = start; i < start+ length; i++) {
     			 	sb.append(ch[i]);
