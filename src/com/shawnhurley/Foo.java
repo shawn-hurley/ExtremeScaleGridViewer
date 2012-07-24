@@ -12,6 +12,7 @@ public class Foo {
 	private Date date = new Date(86, 12, 19);
 	private GregorianCalendar datetry = new GregorianCalendar(1990, 6, 22);
 	private Integer somewhittyname = 1234;
+	private int[] arraytest = {1,2,3};
 	public int getHello() {
 		return hello;
 	}
@@ -53,6 +54,12 @@ public class Foo {
 	}
 	public void setDatetry(GregorianCalendar datetry) {
 		this.datetry = datetry;
+	}
+	public int[] getArraytest() {
+		return arraytest;
+	}
+	public void setArraytest(int[] arraytest) {
+		this.arraytest = arraytest;
 	}
 
 	

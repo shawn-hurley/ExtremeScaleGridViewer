@@ -8,7 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
+
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -75,7 +78,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		//c.anchor = GridBagConstraints.VERTICAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		EntryTitlePanel.setBackground(Color.WHITE);
+		EntryTitlePanel.setBackground(Color.ORANGE);
 		add(EntryTitlePanel,c);
 		
 		//Put Componentes within requiredInputPanel, then place it in main panel ("this")
@@ -261,15 +264,16 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				@SuppressWarnings("rawtypes")
 				Constructor picked = (Constructor)JOptionPane.showInputDialog(classLookingfor, "Pick a Constructor", "ComboBox Dialog", JOptionPane.QUESTION_MESSAGE
 		                , null, co, co[0]);
-				@SuppressWarnings({ "rawtypes" })
-				Class[] something = picked.getParameterTypes();
-				for (int i = 0; i < something.length; i++) {
-					System.out.print(something[i].toString());
+				System.out.println(picked.toString());
+				@SuppressWarnings({ })
+				Type[] something = picked.getGenericParameterTypes();
+				for(int i = 0; i<something.length; i++){	
+					Object aField = something[i];
+					String typeField = aField.toString();
+					System.out.println("this typeField is " + typeField.toString());
 				}
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (SecurityException e1) {
+			}
+			catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -277,7 +281,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			c.fill = GridBagConstraints.VERTICAL;
 			c.gridx = 1;
 			c.gridy= 1;
-			ListOfValuesPanel.setBackground(Color.BLUE);
+			ListOfValuesPanel.setBackground(Color.LIGHT_GRAY);
 			add(ListOfValuesPanel,c);
 		}
 	}

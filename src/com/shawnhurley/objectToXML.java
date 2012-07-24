@@ -1,9 +1,8 @@
 package com.shawnhurley;
 import java.io.*;
 import java.lang.reflect.*;
-import java.util.GregorianCalendar;
+import java.util.Arrays;
 
-import javax.swing.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 public class objectToXML {
@@ -18,6 +17,7 @@ public class objectToXML {
 	 * @throws SecurityException
 	 * @throws FileNotFoundException
 	 */
+	@SuppressWarnings("rawtypes")
 	public static StringBuffer reflection(Object thing, StringBuffer sb)  throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, FileNotFoundException{
 		int i;
 		boolean firstTimeThrough = true;
@@ -37,6 +37,7 @@ public class objectToXML {
 		for(i=0; i<newFields.length; i++){	
 			Field aField = newFields[i];
 			String typeField = aField.getType().toString();
+			System.out.println(typeField);
 			if(typeField.startsWith("class ")){
 				int INDEX_WHERE_CLASSNAME_BEGINS = 6;	
 				if(typeField.endsWith("java.lang.String")){
@@ -71,6 +72,15 @@ public class objectToXML {
 					sb.append("</" + className + "field>");
 
 				}
+				else if (typeField.contains("[")) {
+					//no other class should contain and [ in the name except for an array
+					System.out.println(aField.getName());
+					Method method = getMethod(aField, c);
+					System.out.println();
+					Array array = (Array) method.invoke(thing, null);
+					System.out.println(array.toString());
+				}
+				
 					
 				else{
 					Method method = getMethod(aField, c);
