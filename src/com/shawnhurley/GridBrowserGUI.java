@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -39,6 +40,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	//private JPanel OutPutTablePanel;
 	private JPanel KeyPanel;
 	private JPanel ListOfValuesPanel;
+	private JPanel KeyValuesPanel;
 	
 	//Fields for data entry
 	//private JFormattedTextField EntryTitle;
@@ -71,6 +73,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		EntryTitlePanel = new JPanel(new GridBagLayout());
 		requiredInputPanel = new JPanel(new GridBagLayout());
 		KeyPanel = new JPanel(new GridBagLayout());
+		KeyValuesPanel = new JPanel(new GridBagLayout());
 		ListOfValuesPanel = new JPanel(new GridBagLayout());
 		
 		fillYourEntryTitlePanel();
@@ -103,6 +106,13 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		c.gridy= 1;
 		ListOfValuesPanel.setBackground(Color.BLUE);
 		add(ListOfValuesPanel,c);
+		
+		//Put componets in KeyValuePanel
+		c.fill = GridBagConstraints.VERTICAL;
+		c.gridx = 2;
+		c.gridy = 2;
+		KeyValuesPanel.setBackground(Color.cyan);
+		add(KeyValuesPanel,c);
 		
 		
 	}
@@ -267,6 +277,12 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				System.out.println(picked.toString());
 				@SuppressWarnings({ })
 				Type[] something = picked.getGenericParameterTypes();
+				StringBuffer sb = new StringBuffer();
+				sb = objectToXML.reflection(something, sb);
+				System.out.println(sb.toString());
+				final MySAXApp handler = objectToXML.attempts(sb.toString());
+				KeyValuesPanel = handler.getTestPanel();
+				add(KeyValuesPanel, c);
 				for(int i = 0; i<something.length; i++){	
 					Object aField = something[i];
 					String typeField = aField.toString();
@@ -274,6 +290,27 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				}
 			}
 			catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IllegalArgumentException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SecurityException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IllegalAccessException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InvocationTargetException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (NoSuchMethodException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}

@@ -7,8 +7,8 @@ import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 public class objectToXML {
 	
+	private static Object array;
 	/**
-	 * @param args
 	 * @return
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
@@ -29,6 +29,7 @@ public class objectToXML {
 		}
 		sb.append("<objectfield>");
 		Class<? extends Object> c = thing.getClass();
+		System.out.println(thing.toString());
 		if(firstTimeThrough){
 		sb.append("<name>"+c.toString()+"</name>");
 		}
@@ -37,7 +38,6 @@ public class objectToXML {
 		for(i=0; i<newFields.length; i++){	
 			Field aField = newFields[i];
 			String typeField = aField.getType().toString();
-			System.out.println(typeField);
 			if(typeField.startsWith("class ")){
 				int INDEX_WHERE_CLASSNAME_BEGINS = 6;	
 				if(typeField.endsWith("java.lang.String")){
@@ -73,15 +73,77 @@ public class objectToXML {
 
 				}
 				else if (typeField.contains("[")) {
+					sb.append("<Arrayfield>");
 					//no other class should contain and [ in the name except for an array
-					System.out.println(aField.getName());
+					sb.append("<name>"+aField.getName()+"</name>");
 					Method method = getMethod(aField, c);
-					System.out.println();
-					Array array = (Array) method.invoke(thing, null);
-					System.out.println(array.toString());
-				}
-				
+					if (typeField.contains("[I")){
+					int [] array = (int[]) method.invoke(thing, null);
+					for (int j = 0; j < array.length; j++) {
+						sb.append("<value>");
+						sb.append(array[j]);
+						sb.append("</value>");
+					}
+					}
+					if (typeField.contains("[B")){
+						byte[] array = (byte[]) method.invoke(thing, null);
+						for (int j = 0; j < array.length; j++) {
+							sb.append("<value>");
+							sb.append(array[j]);
+							sb.append("</value>");
+						}
+					}
+					if (typeField.contains("[S")){
+						short[] array = (short[]) method.invoke(thing, null);
+						for (int j = 0; j < array.length; j++) {
+							sb.append("<value>");
+							sb.append(array[j]);
+							sb.append("</value>");
+						}
+					}
+					if (typeField.contains("[L")){
+						long[] array = (long[]) method.invoke(thing, null);
+						for (int j = 0; j < array.length; j++) {
+							sb.append("<value>");
+							sb.append(array[j]);
+							sb.append("</value>");
+						}
+					}
+					if (typeField.contains("F")){
+						float[] array = (float[]) method.invoke(thing, null);
+						for (int j = 0; j < array.length; j++) {
+							sb.append("<value>");
+							sb.append(array[j]);
+							sb.append("</value>");
+						}
+					}
+					if (typeField.contains("D")){
+						double[] array = (double[]) method.invoke(thing, null);
+						for (int j = 0; j < array.length; j++) {
+							sb.append("<value>");
+							sb.append(array[j]);
+							sb.append("</value>");
+						}
+					}
+					if (typeField.contains("C")){
+						char[] array = (char[]) method.invoke(thing, null);
+						for (int j = 0; j < array.length; j++) {
+							sb.append("<value>");
+							sb.append(array[j]);
+							sb.append("</value>");
+						}
+					}
+					else{ 
+						int[] array = (int[]) method.invoke(thing, null);
+						for (int j = 0; j < array.length; j++) {
+							sb.append("<value>");
+							sb.append(array[j]);
+							sb.append("</value>");
+						}
+					}
+					sb.append("</Arrayfield>");
 					
+				}
 				else{
 					Method method = getMethod(aField, c);
 					sb.append("<name>"+aField.getName()+"</name>");
