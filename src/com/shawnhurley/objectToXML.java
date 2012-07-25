@@ -9,6 +9,9 @@ public class objectToXML {
 	
 	private static Object array;
 	/**
+	 * Author: Shawn Hurley
+	 * This is a utility function that is used to make a string buffer, as well as set up SAXX app handler that
+	 * allows you to get a Panel with layout. 
 	 * @return
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
@@ -17,7 +20,6 @@ public class objectToXML {
 	 * @throws SecurityException
 	 * @throws FileNotFoundException
 	 */
-	@SuppressWarnings("rawtypes")
 	public static StringBuffer reflection(Object thing, StringBuffer sb)  throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, FileNotFoundException{
 		int i;
 		boolean firstTimeThrough = true;
@@ -31,7 +33,8 @@ public class objectToXML {
 		Class<? extends Object> c = thing.getClass();
 		System.out.println(thing.toString());
 		if(firstTimeThrough){
-		sb.append("<name>"+c.toString()+"</name>");
+			//No need to add a name of a object twice, the only time to do this is when it is the first time through
+			sb.append("<name>"+c.toString()+"</name>");
 		}
 		Field newFields[]= c.getDeclaredFields();
 		sb.append("<fields>");
