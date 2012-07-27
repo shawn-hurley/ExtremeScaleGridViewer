@@ -275,19 +275,11 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				Constructor picked = (Constructor)JOptionPane.showInputDialog(classLookingfor, "Pick a Constructor", "ComboBox Dialog", JOptionPane.QUESTION_MESSAGE
 		                , null, co, co[0]);
 				System.out.println(picked.toString());
-				@SuppressWarnings({ })
-				Type[] something = picked.getGenericParameterTypes();
 				StringBuffer sb = new StringBuffer();
-				sb = objectToXML.reflection(something, sb);
+				sb = constructorToXML.reflection(picked, sb);
+				MySAXApp handler = objectToXML.attempts(sb.toString());
 				System.out.println(sb.toString());
-				final MySAXApp handler = objectToXML.attempts(sb.toString());
-				KeyValuesPanel = handler.getTestPanel();
-				add(KeyValuesPanel, c);
-				for(int i = 0; i<something.length; i++){	
-					Object aField = something[i];
-					String typeField = aField.toString();
-					System.out.println("this typeField is " + typeField.toString());
-				}
+				
 			}
 			catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
@@ -296,18 +288,6 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (SecurityException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IllegalAccessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (InvocationTargetException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (NoSuchMethodException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (IOException e1) {
@@ -344,10 +324,10 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	public void fillLisOfValuesPanel() throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException{
 		new GridBagConstraints();
 		//will use the XMLReader and call MySAXApp to return the panel
-		Foo newfoo = new Foo();
-		StringBuffer sb = null;
-		sb = objectToXML.reflection(newfoo, sb);
-		final MySAXApp handler = objectToXML.attempts(sb.toString());
-		ListOfValuesPanel = handler.getTestPanel();
+//		Foo newfoo = new Foo();
+//		StringBuffer sb = null;
+//		sb = objectToXML.reflection(newfoo, sb);
+//		final MySAXApp handler = objectToXML.attempts(sb.toString());
+//		ListOfValuesPanel = handler.getTestPanel();
 }
 }
