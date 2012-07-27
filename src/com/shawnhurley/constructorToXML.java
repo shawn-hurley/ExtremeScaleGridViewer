@@ -17,7 +17,7 @@ public class constructorToXML {
 					sb.append("<name>ints</name>");
 					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");
-						sb.append("");
+						sb.append(" ");
 						sb.append("</value>");
 					}
 				}
@@ -25,7 +25,7 @@ public class constructorToXML {
 					sb.append("<name>bytes</name>");
 					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");
-						sb.append("");
+						sb.append(" ");
 						sb.append("</value>");
 					}
 				}
@@ -34,57 +34,57 @@ public class constructorToXML {
 					sb.append("<name>shorts</name>");
 					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");
-						sb.append(array[j]);
+						sb.append(" ");
 						sb.append("</value>");
 					}
 				}
 				if (typeField.contains("[L")){
 					long[] array = {};
 					sb.append("<name>long</name>");
-					for (int j = 0; j < array.length; j++) {
+					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");
-						sb.append(array[j]);
+						sb.append(" ");
 						sb.append("</value>");
 					}
 				}
 				if (typeField.contains("F")){
 					float[] array = {};
 					sb.append("<name>floats</name>");
-					for (int j = 0; j < array.length; j++) {
+					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");
-						sb.append(array[j]);
+						sb.append(" ");
 						sb.append("</value>");
 					}
 				}
 				if (typeField.contains("D")){
 					double[] array = {};
 					sb.append("<name>double</name>");
-					for (int j = 0; j < array.length; j++) {
+					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");
-						sb.append(array[j]);
+						sb.append(" ");
 						sb.append("</value>");
 					}
 				}
 				if (typeField.contains("C")){
 					char[] array = {};
 					sb.append("<name>char</name>");
-					for (int j = 0; j < array.length; j++) {
+					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");
-						sb.append(array[j]);
+						sb.append(" ");
 						sb.append("</value>");
 					}
 				}
 			sb.append("</Arrayfield>");
 			}
 				else{
-					sb.append("<fields>");
+					sb.append("<field>");
 					sb.append("<name>");
 					sb.append(typeField.toString());
 					sb.append("</name>");
 					sb.append("<value>");
-					sb.append("");
+					sb.append(" ");
 					sb.append("</value>"); 
-					sb.append("</fields>");
+					sb.append("</field>");
 				}
 			}
 		sb.append("</panel>");

@@ -94,6 +94,7 @@ public class MySAXApp extends DefaultHandler {
     		c.gridx=xvalue;
     		c.gridy=yvalue;
     		JFormattedTextField testField = new JFormattedTextField(sb.toString());
+    		testField.setColumns(5);
     		testPanel.add(testField,c);
     		xvalue++;
     	}

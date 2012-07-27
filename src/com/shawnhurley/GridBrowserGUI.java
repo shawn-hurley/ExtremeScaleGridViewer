@@ -278,7 +278,8 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				StringBuffer sb = new StringBuffer();
 				sb = constructorToXML.reflection(picked, sb);
 				MySAXApp handler = objectToXML.attempts(sb.toString());
-				System.out.println(sb.toString());
+				KeyValuesPanel = handler.getTestPanel();
+				add(KeyValuesPanel, c);
 				
 			}
 			catch (ClassNotFoundException e1) {
