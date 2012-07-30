@@ -9,6 +9,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
 import javax.swing.plaf.metal.DefaultMetalTheme;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -47,7 +49,8 @@ public class GridBrowser {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		JFrame frame = new JFrame("GridViewer");
+		JFrame frame = new JFrame("Grid Browser");
+		frame.setPreferredSize(new Dimension(1500, 500));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//Add contents to the window.

@@ -52,6 +52,8 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	private JFormattedTextField Grid_Name;
 	private JButton getButton;
 	private JButton updateButton;
+	private JButton removeButton;
+	private JButton invalidateButton;
 	//************ Need to add more here, attempting to make the first screen first*******/
 	
 	//Formats to format and parse numbers
@@ -79,7 +81,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		fillYourEntryTitlePanel();
 		c.fill = GridBagConstraints.FIRST_LINE_START;
 		//c.anchor = GridBagConstraints.VERTICAL;
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 0;
 		EntryTitlePanel.setBackground(Color.ORANGE);
 		add(EntryTitlePanel,c);
@@ -87,8 +89,8 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		//Put Componentes within requiredInputPanel, then place it in main panel ("this")
 		fillyourRequiredInputPanel();
 		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx=0;
-		c.gridy=2;
+		c.gridx=1;
+		c.gridy=1;
 		requiredInputPanel.setBackground(Color.GRAY);
 		add(requiredInputPanel,c);
 		
@@ -102,14 +104,14 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		
 		//Put componets in ListOfValues
 		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy= 1;
 		ListOfValuesPanel.setBackground(Color.BLUE);
 		add(ListOfValuesPanel,c);
 		
 		//Put componets in KeyValuePanel
 		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 2;
+		c.gridx = 0;
 		c.gridy = 2;
 		KeyValuesPanel.setBackground(Color.cyan);
 		add(KeyValuesPanel,c);
@@ -215,15 +217,12 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		Grid_Name.setColumns(10);
 		requiredInputPanel.add(Grid_Name, c);
 		
-		//Add the submit button
+		//Add the get button and the Update value 
 	    getButton = new JButton("Get");
 	    updateButton = new JButton("Update");
 	    Font cf = getButton.getFont();
 	    Font buttonFont = new Font(cf.getName(), cf.getStyle(), 12);
 	    updateButton.setFont(buttonFont);
-	    getButton.setFont(buttonFont);
-	    getButton.setVerticalTextPosition(AbstractButton.CENTER);
-	    getButton.setHorizontalTextPosition(AbstractButton.CENTER); //aka LEFT, for left-to-right locales
 	    getButton.setEnabled(true);
 	    getButton.setActionCommand(ACTION_CALCULATE);
 	    getButton.addActionListener(this);
@@ -237,6 +236,24 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	    c.gridx = 1;
 	    c.gridy= 4;
 	    requiredInputPanel.add(updateButton, c);
+	    
+	    //Add the Remove and Invalidate Buttons
+	    removeButton = new JButton("Remove");
+	    invalidateButton = new JButton("Invalidate");
+	    removeButton.setFont(buttonFont);
+	    invalidateButton.setFont(buttonFont);
+	    removeButton.setEnabled(true);
+	    removeButton.addActionListener(this);
+	    c.fill = GridBagConstraints.HORIZONTAL;
+	    c.gridx=0;
+	    c.gridy=5;
+	    requiredInputPanel.add(removeButton, c);
+	    invalidateButton.setEnabled(true);
+	    invalidateButton.addActionListener(this);
+	    c.fill = GridBagConstraints.HORIZONTAL;
+	    c.gridx=1;
+	    c.gridy=5;
+	    requiredInputPanel.add(invalidateButton, c);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -277,8 +294,11 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				System.out.println(picked.toString());
 				StringBuffer sb = new StringBuffer();
 				sb = constructorToXML.reflection(picked, sb);
+				System.out.println(sb);
 				MySAXApp handler = objectToXML.attempts(sb.toString());
 				KeyValuesPanel = handler.getTestPanel();
+				c.gridx = 0;
+				c.gridy = 2;
 				add(KeyValuesPanel, c);
 				
 			}
@@ -297,10 +317,12 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			}
 			
 			c.fill = GridBagConstraints.VERTICAL;
-			c.gridx = 1;
+			c.gridx = 2;
 			c.gridy= 1;
 			ListOfValuesPanel.setBackground(Color.LIGHT_GRAY);
 			add(ListOfValuesPanel,c);
+			revalidate();
+			repaint();
 		}
 	}
 	public void fillKeyPanel(){
@@ -325,10 +347,10 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	public void fillLisOfValuesPanel() throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException{
 		new GridBagConstraints();
 		//will use the XMLReader and call MySAXApp to return the panel
-//		Foo newfoo = new Foo();
-//		StringBuffer sb = null;
-//		sb = objectToXML.reflection(newfoo, sb);
-//		final MySAXApp handler = objectToXML.attempts(sb.toString());
-//		ListOfValuesPanel = handler.getTestPanel();
+		Foo newfoo = new Foo();
+		StringBuffer sb = null;
+		sb = objectToXML.reflection(newfoo, sb);
+		final MySAXApp handler = objectToXML.attempts(sb.toString());
+		ListOfValuesPanel = handler.getTestPanel();
 }
 }

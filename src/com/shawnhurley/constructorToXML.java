@@ -10,6 +10,34 @@ public class constructorToXML {
 		sb.append("<panel>");
 		for (int i = 0; i < something.length; i++) {
 			String typeField = something[i].toString();
+			if(typeField.endsWith("java.lang.String")){
+				sb.append("<stringfield>");
+				sb.append("<name>String</name>");
+				sb.append("<value>");
+				sb.append(" ");
+		        sb.append("</value>");
+		        sb.append("</stringfield>");
+			}
+			if (typeField.endsWith("java.lang.Byte") || typeField.endsWith("java.lang.Short") || typeField.endsWith("java.lang.Integer") || typeField.endsWith("java.lang.Long") || 
+					typeField.endsWith("java.lang.Float") || typeField.endsWith("java.lang.Double") || typeField.endsWith("java.lang.Character") || typeField.endsWith("Boolean")) {
+				sb.append("<" + typeField.replace(".", "") + "field>");
+				sb.append("<name>");
+				sb.append(typeField.replace("java.lang", ""));
+				sb.append("</name>");
+				sb.append("<value>");
+				sb.append(" ");
+		        sb.append("</value>");
+				sb.append("</"+typeField.replace(".", "")+"field>");
+			}
+			if (typeField.endsWith("java.util.GregorianCalendar") || typeField.endsWith("java.util.Date")){
+				sb.append("<" + typeField.replace(".", "") + "field>");
+				sb.append("<name>"+typeField.replace("java.lang", "")+"</name>");
+				sb.append("<value>");
+				sb.append(" ");
+				sb.append("</value>");
+				sb.append("<value> </value><value> </value>");
+				sb.append("</" + typeField.replace(".", "") + "field>");
+			}
 			if (typeField.contains("[")) {
 				sb.append("<Arrayfield>");
 				//no other class should contain and [ in the name except for an array
@@ -76,19 +104,18 @@ public class constructorToXML {
 				}
 			sb.append("</Arrayfield>");
 			}
-				else{
-					sb.append("<field>");
-					sb.append("<name>");
-					sb.append(typeField.toString());
-					sb.append("</name>");
-					sb.append("<value>");
-					sb.append(" ");
-					sb.append("</value>"); 
-					sb.append("</field>");
-				}
+			else{
+				sb.append("<field>");
+				sb.append("<name>");
+				sb.append(typeField.toString());
+				sb.append("</name>");
+				sb.append("<value>");
+				sb.append(" ");
+				sb.append("</value>"); 
+				sb.append("</field>");
 			}
+	}
 		sb.append("</panel>");
 		return sb;
-		
 	}
 }
