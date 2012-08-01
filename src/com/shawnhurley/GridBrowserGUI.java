@@ -224,11 +224,25 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 		
 		if (ACTION_CALCULATE.equals(e.getActionCommand())){
+			invalidate();
+			KeyValuesPanel = null;
+			ListOfValuesPanel = null;
 			//JOptionPane.showMessageDialog(refreshButton, "hello world");
 			GridBagConstraints c = new GridBagConstraints();
 			GridBagConstraints labelconstraints = new GridBagConstraints();
+			
 			try {
-				fillLisOfValuesPanel();
+				try {
+					try {
+						fillLisOfValuesPanel(Class.forName(ValueClass.getText()));
+					} catch (InstantiationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			} catch (IllegalArgumentException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -254,7 +268,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				@SuppressWarnings({ "rawtypes" })
 				Constructor[] co = cl.getConstructors();
 				@SuppressWarnings("rawtypes")
-				Constructor picked = (Constructor)JOptionPane.showInputDialog(classLookingfor, "Pick a Constructor", "ComboBox Dialog", JOptionPane.QUESTION_MESSAGE
+				Constructor picked = (Constructor)JOptionPane.showInputDialog(classLookingfor, "Pick a Constructor", "", JOptionPane.QUESTION_MESSAGE
 		                , null, co, co[0]);
 				System.out.println(picked.toString());
 				StringBuffer sb = new StringBuffer();
@@ -272,7 +286,8 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				labelconstraints.gridx = 0;
 				labelconstraints.gridy = 0;
 				KeyValuesPanel.add(KeyValuesPanelLabel, labelconstraints);
-				//Adding the Buttons. 
+				//Adding the Buttons. //These Buttons will be what the user uses to interact with WXS
+				
 				 getButton = new JButton("Get");
 				 updateButton = new JButton("Update");
 				 Font cf = refreshButton.getFont();
@@ -314,7 +329,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			}
 			catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Key Class not found, pleas select again");
 			} catch (IllegalArgumentException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -331,16 +346,17 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			c.gridy= 1;
 			ListOfValuesPanel.setBackground(Color.LIGHT_GRAY);
 			add(ListOfValuesPanel,c);
+			KeyValuesPanel.revalidate();
+			KeyValuesPanel.repaint();
 			revalidate();
 			repaint();
 		}
 	}
-	public void fillLisOfValuesPanel() throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException{
+	public void fillLisOfValuesPanel(@SuppressWarnings("rawtypes") Class given) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, InstantiationException{
 		new GridBagConstraints();
 		//will use the XMLReader and call MySAXApp to return the panel
-		Foo newfoo = new Foo();
 		StringBuffer sb = null;
-		sb = objectToXML.reflection(newfoo, sb);
+		sb = objectToXML.reflection(given, sb);
 		final MySAXApp handler = objectToXML.attempts(sb.toString());
 		ListOfValuesPanel = handler.getTestPanel();
 }

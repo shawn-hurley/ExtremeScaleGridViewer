@@ -19,8 +19,9 @@ public class objectToXML {
 	 * @throws NoSuchMethodException
 	 * @throws SecurityException
 	 * @throws FileNotFoundException
+	 * @throws InstantiationException 
 	 */
-	public static StringBuffer reflection(Object thing, StringBuffer sb)  throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, FileNotFoundException{
+	public static StringBuffer reflection(Class c, StringBuffer sb)  throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, FileNotFoundException, InstantiationException{
 		int i;
 		boolean firstTimeThrough = true;
 		if(sb == null){
@@ -30,8 +31,7 @@ public class objectToXML {
 			firstTimeThrough = false;
 		}
 		sb.append("<objectfield>");
-		Class<? extends Object> c = thing.getClass();
-		System.out.println(thing.toString());
+		Object thing = c.newInstance();
 		if(firstTimeThrough){
 			//No need to add a name of a object twice, the only time to do this is when it is the first time through
 			sb.append("<name>"+c.toString()+"</name>");
@@ -151,7 +151,7 @@ public class objectToXML {
 					Method method = getMethod(aField, c);
 					sb.append("<name>"+aField.getName()+"</name>");
 					Object obj = method.invoke(thing, null);
-					reflection(obj, sb);
+					reflection(obj.getClass(), sb);
 				}
 			}
 			else{
