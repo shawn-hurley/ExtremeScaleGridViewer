@@ -38,7 +38,6 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	//private JPanel ResultTitlePanel;
 	private JPanel requiredInputPanel;
 	//private JPanel OutPutTablePanel;
-	private JPanel KeyPanel;
 	private JPanel ListOfValuesPanel;
 	private JPanel KeyValuesPanel;
 	
@@ -50,11 +49,12 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	private JFormattedTextField ValueClass;
 	private JFormattedTextField Grid_endpt;
 	private JFormattedTextField Grid_Name;
-	private JButton getButton;
+	private JButton refreshButton;
 	private JButton updateButton;
 	private JButton removeButton;
 	private JButton invalidateButton;
 	//************ Need to add more here, attempting to make the first screen first*******/
+	private JButton getButton;
 	
 	//Formats to format and parse numbers
 	//private NumberFormat integerFormat = NumberFormat.getIntegerInstance();
@@ -74,7 +74,6 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		//********Construct sub-sections in main panel***************
 		EntryTitlePanel = new JPanel(new GridBagLayout());
 		requiredInputPanel = new JPanel(new GridBagLayout());
-		KeyPanel = new JPanel(new GridBagLayout());
 		KeyValuesPanel = new JPanel(new GridBagLayout());
 		ListOfValuesPanel = new JPanel(new GridBagLayout());
 		
@@ -94,14 +93,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		requiredInputPanel.setBackground(Color.GRAY);
 		add(requiredInputPanel,c);
 		
-		//Put componets in KeyPanel
-		fillKeyPanel();
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx=0;
-		c.gridy=1;
-		KeyPanel.setBackground(Color.lightGray);
-		add(KeyPanel,c);
-		
+
 		//Put componets in ListOfValues
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 2;
@@ -217,51 +209,24 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		Grid_Name.setColumns(10);
 		requiredInputPanel.add(Grid_Name, c);
 		
-		//Add the get button and the Update value 
-	    getButton = new JButton("Get");
-	    updateButton = new JButton("Update");
-	    Font cf = getButton.getFont();
-	    Font buttonFont = new Font(cf.getName(), cf.getStyle(), 12);
-	    updateButton.setFont(buttonFont);
-	    getButton.setEnabled(true);
-	    getButton.setActionCommand(ACTION_CALCULATE);
-	    getButton.addActionListener(this);
-	    c.fill = GridBagConstraints.HORIZONTAL;
+		//Add the Refresh button and the Update value 
+	    refreshButton = new JButton("Refresh");
+	    refreshButton.setEnabled(true);
+	    refreshButton.setActionCommand(ACTION_CALCULATE);
+	    refreshButton.addActionListener(this);
+	    c.fill = GridBagConstraints.SOUTH;
 		c.gridx = 0;
 		c.gridy = 4;
-	    requiredInputPanel.add(getButton, c);
-	    updateButton.setEnabled(true);
-	    updateButton.addActionListener(this);
-	    c.fill = GridBagConstraints.HORIZONTAL;
-	    c.gridx = 1;
-	    c.gridy= 4;
-	    requiredInputPanel.add(updateButton, c);
-	    
-	    //Add the Remove and Invalidate Buttons
-	    removeButton = new JButton("Remove");
-	    invalidateButton = new JButton("Invalidate");
-	    removeButton.setFont(buttonFont);
-	    invalidateButton.setFont(buttonFont);
-	    removeButton.setEnabled(true);
-	    removeButton.addActionListener(this);
-	    c.fill = GridBagConstraints.HORIZONTAL;
-	    c.gridx=0;
-	    c.gridy=5;
-	    requiredInputPanel.add(removeButton, c);
-	    invalidateButton.setEnabled(true);
-	    invalidateButton.addActionListener(this);
-	    c.fill = GridBagConstraints.HORIZONTAL;
-	    c.gridx=1;
-	    c.gridy=5;
-	    requiredInputPanel.add(invalidateButton, c);
+	    requiredInputPanel.add(refreshButton, c);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
 		if (ACTION_CALCULATE.equals(e.getActionCommand())){
-			//JOptionPane.showMessageDialog(getButton, "hello world");
+			//JOptionPane.showMessageDialog(refreshButton, "hello world");
 			GridBagConstraints c = new GridBagConstraints();
+			GridBagConstraints labelconstraints = new GridBagConstraints();
 			try {
 				fillLisOfValuesPanel();
 			} catch (IllegalArgumentException e1) {
@@ -283,7 +248,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			String name = KeyPanelTextField.getText();
+			String name = classLookingfor.getText();
 			try {
 				Class<?> cl = Class.forName(name);
 				@SuppressWarnings({ "rawtypes" })
@@ -297,10 +262,55 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				System.out.println(sb);
 				MySAXApp handler = objectToXML.attempts(sb.toString());
 				KeyValuesPanel = handler.getTestPanel();
-				c.gridx = 0;
-				c.gridy = 2;
+				c.gridx = 2;
+				c.gridy = 1;
+				//We need to add the Label at the Top as well as the buttons. 
+				JLabel KeyValuesPanelLabel = new JLabel("Keys");
+				Font labelfont = KeyValuesPanelLabel.getFont();
+				KeyValuesPanelLabel.setFont(new Font(labelfont.getName(), 25, 25));
+				labelconstraints.fill = GridBagConstraints.NORTH;
+				labelconstraints.gridx = 0;
+				labelconstraints.gridy = 0;
+				KeyValuesPanel.add(KeyValuesPanelLabel, labelconstraints);
+				//Adding the Buttons. 
+				 getButton = new JButton("Get");
+				 updateButton = new JButton("Update");
+				 Font cf = refreshButton.getFont();
+				 Font buttonFont = new Font(cf.getName(), cf.getStyle(), 12);
+				 updateButton.setFont(buttonFont);
+				 getButton.setEnabled(true);
+				 getButton.setActionCommand(ACTION_CALCULATE);
+				 getButton.addActionListener(this);
+				 labelconstraints.fill = GridBagConstraints.SOUTH;
+				 labelconstraints.gridx = 0;
+				 labelconstraints.gridy = 4;
+				 KeyValuesPanel.add(getButton, labelconstraints);
+				 updateButton.setEnabled(true);
+				 updateButton.addActionListener(this);
+				 labelconstraints.fill = GridBagConstraints.SOUTH;
+				 labelconstraints.gridx = 1;
+				 labelconstraints.gridy= 4;
+				 KeyValuesPanel.add(updateButton, labelconstraints);
+				    
+				  //Add the Remove and Invalidate Buttons
+				  removeButton = new JButton("Remove");
+				  invalidateButton = new JButton("Invalidate");
+				  removeButton.setFont(buttonFont);
+				  invalidateButton.setFont(buttonFont);
+				  removeButton.setEnabled(true);
+				  removeButton.addActionListener(this);
+				  labelconstraints.fill = GridBagConstraints.SOUTH;
+				  labelconstraints.gridx=0;
+				  labelconstraints.gridy=5;
+				  KeyValuesPanel.add(removeButton, labelconstraints);
+				  invalidateButton.setEnabled(true);
+				  invalidateButton.addActionListener(this);
+				  labelconstraints.fill = GridBagConstraints.SOUTH;
+				  labelconstraints.gridx=1;
+				  labelconstraints.gridy=5;
+				  KeyValuesPanel.add(invalidateButton, labelconstraints);
 				add(KeyValuesPanel, c);
-				
+			
 			}
 			catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
@@ -317,32 +327,13 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			}
 			
 			c.fill = GridBagConstraints.VERTICAL;
-			c.gridx = 2;
+			c.gridx = 3;
 			c.gridy= 1;
 			ListOfValuesPanel.setBackground(Color.LIGHT_GRAY);
 			add(ListOfValuesPanel,c);
 			revalidate();
 			repaint();
 		}
-	}
-	public void fillKeyPanel(){
-		GridBagConstraints c = new GridBagConstraints();
-		
-		//Add the Label 
-		c.fill = GridBagConstraints.WEST;
-		c.gridx = 0;
-		c.gridy = 0;
-		KeyPanelLabel = new JLabel("Key");
-		KeyPanel.add(KeyPanelLabel, c);
-		
-		//Add a text field
-		c.fill = GridBagConstraints.EAST;
-		c.gridx = 1;
-		c.gridy = 0;
-		KeyPanelTextField = new JFormattedTextField();
-		KeyPanelTextField.setEditable(true);
-		KeyPanelTextField.setColumns(20);
-		KeyPanel.add(KeyPanelTextField,c);
 	}
 	public void fillLisOfValuesPanel() throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException{
 		new GridBagConstraints();
