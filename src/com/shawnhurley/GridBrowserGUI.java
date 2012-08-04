@@ -94,14 +94,14 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		add(requiredInputPanel,c);
 		
 
-		//Put componets in ListOfValues
+		//Put components in ListOfValues
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 2;
 		c.gridy= 1;
 		ListOfValuesPanel.setBackground(Color.BLUE);
 		add(ListOfValuesPanel,c);
 		
-		//Put componets in KeyValuePanel
+		//Put components in KeyValuePanel
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 0;
 		c.gridy = 2;
@@ -219,14 +219,18 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		c.gridy = 4;
 	    requiredInputPanel.add(refreshButton, c);
 	}
+	@SuppressWarnings("null")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
 		if (ACTION_CALCULATE.equals(e.getActionCommand())){
 			invalidate();
-			KeyValuesPanel = null;
-			ListOfValuesPanel = null;
+			KeyValuesPanel.removeAll();
+			ListOfValuesPanel.removeAll();
+			
+			
+			
 			//JOptionPane.showMessageDialog(refreshButton, "hello world");
 			GridBagConstraints c = new GridBagConstraints();
 			GridBagConstraints labelconstraints = new GridBagConstraints();
@@ -270,10 +274,8 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				@SuppressWarnings("rawtypes")
 				Constructor picked = (Constructor)JOptionPane.showInputDialog(classLookingfor, "Pick a Constructor", "", JOptionPane.QUESTION_MESSAGE
 		                , null, co, co[0]);
-				System.out.println(picked.toString());
 				StringBuffer sb = new StringBuffer();
 				sb = constructorToXML.reflection(picked, sb);
-				System.out.println(sb);
 				MySAXApp handler = objectToXML.attempts(sb.toString());
 				KeyValuesPanel = handler.getTestPanel();
 				c.gridx = 2;
@@ -346,7 +348,9 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			c.gridy= 1;
 			ListOfValuesPanel.setBackground(Color.LIGHT_GRAY);
 			add(ListOfValuesPanel,c);
-			KeyValuesPanel.revalidate();
+			ListOfValuesPanel.validate();
+			ListOfValuesPanel.repaint();
+			KeyValuesPanel.validate();
 			KeyValuesPanel.repaint();
 			revalidate();
 			repaint();

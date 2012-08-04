@@ -51,7 +51,6 @@ public class MySAXApp extends DefaultHandler {
 		else{
 			elementName = qName;
 		}
-		System.out.print(elementName.toString());
 	}
 	
 
@@ -62,7 +61,6 @@ public class MySAXApp extends DefaultHandler {
     		yvalue++;
     		xvalue++;
     	}
-    	System.out.println(qName.toString()+"end");
     }
 
 
@@ -76,7 +74,6 @@ public class MySAXApp extends DefaultHandler {
     		for (int i = start; i < start+ length; i++) {
     			 	sb.append(ch[i]);
     		}
-    		System.out.println(sb.toString());
     		c.fill = GridBagConstraints.HORIZONTAL;
     		c.gridx = xvalue;
     		c.gridy = yvalue;
@@ -89,7 +86,6 @@ public class MySAXApp extends DefaultHandler {
     		for (int i = start; i < start + length; i++) {
 				sb.append(ch[i]);
 			}
-    		System.out.println(sb.toString());
     		c.fill = GridBagConstraints.HORIZONTAL;
     		c.gridx=xvalue;
     		c.gridy=yvalue;
