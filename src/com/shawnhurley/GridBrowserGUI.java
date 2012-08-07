@@ -352,7 +352,21 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		if (getButtonPushed.equals(e.getActionCommand())){
 			Component[] arrayofcomponets = KeyValuesPanel.getComponents();
 			ArrayList<Object> arrayofvalues = cleanComponents(arrayofcomponets);
-			System.out.println(arrayofvalues.toString());
+			try {
+				keyPicked.newInstance(arrayofvalues.toArray());
+			} catch (IllegalArgumentException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InstantiationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IllegalAccessException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InvocationTargetException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 				
 			
 			//String stringToManipulate = sb.toString();
@@ -375,16 +389,11 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	private ArrayList<Object> cleanComponents(Component[] componets){
 		ArrayList<Object> listOfObjects = new ArrayList();
 		Type[] classesweuse = keyPicked.getGenericParameterTypes();
-		for (int i = 0; i < classesweuse.length; i++) {
-			System.out.println(classesweuse);
-		}
 		int counter = 0;
 		for (int i = 0; i < componets.length; i++) {
 			if (componets[i].toString().contains("JFormattedTextField")){
-				System.out.println(componets[i].toString());
-				System.out.println(i);
 				if(componets[i+1].toString().contains("JFormattedTextField")){
-					//will make an array of all the values or is a date field. 
+					//will make an array of all the values or is a date field.
 					if(classesweuse[counter].toString().equals("class [I")){
 						int[] array = {Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
 						//need to move past the 5 values for the array, which should all be right next to each other so no need for anything else
@@ -392,54 +401,54 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 						listOfObjects.add(array);
 						counter++;
 						}
-					if(classesweuse[counter].toString().equals("class [B")){
+					else if(classesweuse[counter].toString().equals("class [B")){
 						byte[] array = {Byte.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Byte.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Byte.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Byte.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Byte.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
 						//need to move past the 5 values
 						i = i+4;
 						listOfObjects.add(array);
 						counter++;
 					}
-					if(classesweuse[counter].toString().equals("class [C")){
+					else if(classesweuse[counter].toString().equals("class [C")){
 						char[] array = {Character.valueOf(((JFormattedTextField) componets[i]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString().charAt(0))};
 						//need to move past the 5 values
 						i = i+4;
 						listOfObjects.add(array);
 						counter++;
 					}
-					if(classesweuse[counter].toString().equals("class [S")){
+					else if(classesweuse[counter].toString().equals("class [S")){
 						short[] array ={Short.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Short.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Short.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Short.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Short.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
 						//need to move past the 5 values
 						i = i+4;
 						listOfObjects.add(array);
 						counter++;
 					}
-					if(classesweuse[counter].toString().equals("class [D")){
+					else if(classesweuse[counter].toString().equals("class [D")){
 						double[] array = {Double.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Double.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Double.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Double.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Double.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
 						//need to move past the 5 values
 						i = i+4;
 						listOfObjects.add(array);
 						counter++;
 					}
-					if(classesweuse[counter].toString().equals("class [F")){
+					else if(classesweuse[counter].toString().equals("class [F")){
 						float[] array = {Float.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Float.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Float.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Float.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Float.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
 						i = i+4;
 						listOfObjects.add(array);
 						counter++;
 					}
-					if(classesweuse[counter].toString().equals("class [L")){
+					else if(classesweuse[counter].toString().equals("class [L")){
 						long[] array = {Long.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Long.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Long.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Long.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Long.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
 						i = i+4;
 						listOfObjects.add(array);
 						counter++;
 					}
-					if(classesweuse[counter].toString().contains("java.util.Date")){
+					else if(classesweuse[counter].toString().contains("java.util.Date")){
 						@SuppressWarnings("deprecation")
 						Date date = new Date(Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()));
 						i = i+2;
 						listOfObjects.add(date);
 						counter++;
 					}
-					if(classesweuse[counter].toString().contains("GregorianCalendar")){
+					else if(classesweuse[counter].toString().contains("GregorianCalendar")){
 						GregorianCalendar calendar = new GregorianCalendar(Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()));
 						i = i+2;
 						listOfObjects.add(calendar);
@@ -452,32 +461,32 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 						listOfObjects.add(thing);
 						counter++;
 					}
-					if(classesweuse[counter].toString().equals("double") || classesweuse[counter].toString().contains("Double")){
+					else if(classesweuse[counter].toString().equals("double") || classesweuse[counter].toString().contains("Double")){
 						Double thing = new Double(((JFormattedTextField) componets[i]).getValue().toString());
 						listOfObjects.add(thing);
 						counter++;
 					}
-					if(classesweuse[counter].toString().equals("float") || classesweuse[counter].toString().contains("Float")){
+					else if(classesweuse[counter].toString().equals("float") || classesweuse[counter].toString().contains("Float")){
 						Float thing = new Float(((JFormattedTextField) componets[i]).getValue().toString());
 						listOfObjects.add(thing);
 						counter++;
 					}
-					if(classesweuse[counter].toString().equals("long") || classesweuse[counter].toString().contains("Long")){
+					else if(classesweuse[counter].toString().equals("long") || classesweuse[counter].toString().contains("Long")){
 						Long thing = new Long(((JFormattedTextField) componets[i]).getValue().toString());
 						listOfObjects.add(thing);
 						counter++;
 					}
-					if(classesweuse[counter].toString().equals("short") || classesweuse[counter].toString().contains("Short")){
+					else if(classesweuse[counter].toString().equals("short") || classesweuse[counter].toString().contains("Short")){
 						Short thing = new Short(((JFormattedTextField) componets[i]).getValue().toString());
 						listOfObjects.add(thing);
 						counter++;
 					}
-					if(classesweuse[counter].toString().equals("byte") || classesweuse[counter].toString().contains("Byte")){
+					else if(classesweuse[counter].toString().equals("byte") || classesweuse[counter].toString().contains("Byte")){
 						Byte thing = new Byte(((JFormattedTextField) componets[i]).getValue().toString());
 						listOfObjects.add(thing);
 						counter++;
 					}
-					if(classesweuse[counter].toString().equals("char") || classesweuse[counter].toString().contains("Character")){
+					else if(classesweuse[counter].toString().equals("char") || classesweuse[counter].toString().contains("Character")){
 						Character thing = new Character(((JFormattedTextField) componets[i]).getValue().toString().charAt(0));
 						listOfObjects.add(thing);
 						counter++;
