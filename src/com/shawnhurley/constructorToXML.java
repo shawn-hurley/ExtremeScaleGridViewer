@@ -58,7 +58,6 @@ public class constructorToXML {
 					}
 				}
 				if (typeField.contains("[S")){
-					short[] array = {};
 					sb.append("<name>shorts</name>");
 					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");
@@ -67,7 +66,6 @@ public class constructorToXML {
 					}
 				}
 				if (typeField.contains("[L")){
-					long[] array = {};
 					sb.append("<name>long</name>");
 					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");
@@ -76,7 +74,6 @@ public class constructorToXML {
 					}
 				}
 				if (typeField.contains("F")){
-					float[] array = {};
 					sb.append("<name>floats</name>");
 					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");
@@ -94,7 +91,6 @@ public class constructorToXML {
 					}
 				}
 				if (typeField.contains("C")){
-					char[] array = {};
 					sb.append("<name>char</name>");
 					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");

@@ -1,6 +1,7 @@
 package com.shawnhurley;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,6 +13,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -19,10 +23,18 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.text.JTextComponent;
+
+import com.sun.tools.javac.util.List;
 
 public class GridBrowserGUI extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	 private static final String ACTION_CALCULATE = "Calculate"; 
+	 private static final String refreshButtonPushed = "Calculate";
+	 private static final String getButtonPushed = "getButtonPushed";
+	 
+
+	 @SuppressWarnings("rawtypes")
+	private Constructor keyPicked;
 	
 	//Title labels to identify groups of fields
 	private JLabel EntryTitleLabel;
@@ -42,10 +54,8 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	private JPanel KeyValuesPanel;
 	
 	//Fields for data entry
-	//private JFormattedTextField EntryTitle;
 	private JFormattedTextField classLookingfor;
 	private JFormattedTextField KeyPanelTextField;
-	//private JFormattedTextField Keytolookup;
 	private JFormattedTextField ValueClass;
 	private JFormattedTextField Grid_endpt;
 	private JFormattedTextField Grid_Name;
@@ -53,7 +63,6 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	private JButton updateButton;
 	private JButton removeButton;
 	private JButton invalidateButton;
-	//************ Need to add more here, attempting to make the first screen first*******/
 	private JButton getButton;
 	
 	//Formats to format and parse numbers
@@ -64,7 +73,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		//set that we are a grid layout type of JPanel
 		super(new GridBagLayout());
 		
-		//Create a GridBagConstraints object we can reuse when adding componets
+		//Create a GridBagConstraints object we can reuse when adding components
 		GridBagConstraints c = new GridBagConstraints();
 		
 		//load our properties from the file in our .jar
@@ -85,7 +94,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		EntryTitlePanel.setBackground(Color.ORANGE);
 		add(EntryTitlePanel,c);
 		
-		//Put Componentes within requiredInputPanel, then place it in main panel ("this")
+		//Put Components within requiredInputPanel, then place it in main panel ("this")
 		fillyourRequiredInputPanel();
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx=1;
@@ -129,17 +138,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		c.gridx = 0;
 		c.gridy = 0;
 		EntryTitleLabel = new JLabel("IBM Grid Browser");
-		EntryTitlePanel.add(EntryTitleLabel, c);
-//		
-//		//Add the text field
-//		c.fill = GridBagConstraints.HORIZONTAL;
-//		c.gridx = 0;
-//		c.gridy = 0;
-//		EntryTitle = new JFormattedTextField();
-//		EntryTitle.setColumns(80);
-//		EntryTitle.setEditable(false);
-//		EntryTitlePanel.add(EntryTitle,c);
-//		
+		EntryTitlePanel.add(EntryTitleLabel, c);	
 		return;
 	}
 	
@@ -212,26 +211,22 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		//Add the Refresh button and the Update value 
 	    refreshButton = new JButton("Refresh");
 	    refreshButton.setEnabled(true);
-	    refreshButton.setActionCommand(ACTION_CALCULATE);
+	    refreshButton.setActionCommand(refreshButtonPushed);
 	    refreshButton.addActionListener(this);
 	    c.fill = GridBagConstraints.SOUTH;
 		c.gridx = 0;
 		c.gridy = 4;
 	    requiredInputPanel.add(refreshButton, c);
 	}
-	@SuppressWarnings("null")
-	@Override
-	public void actionPerformed(ActionEvent e) {
+	@SuppressWarnings({ "null", "rawtypes" })
+	public  void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
-		if (ACTION_CALCULATE.equals(e.getActionCommand())){
+		if (refreshButtonPushed.equals(e.getActionCommand())){
 			invalidate();
 			KeyValuesPanel.removeAll();
 			ListOfValuesPanel.removeAll();
 			
-			
-			
-			//JOptionPane.showMessageDialog(refreshButton, "hello world");
 			GridBagConstraints c = new GridBagConstraints();
 			GridBagConstraints labelconstraints = new GridBagConstraints();
 			
@@ -245,7 +240,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 					}
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Value Class not found, pleas select again");
 				}
 			} catch (IllegalArgumentException e1) {
 				// TODO Auto-generated catch block
@@ -269,13 +264,12 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			String name = classLookingfor.getText();
 			try {
 				Class<?> cl = Class.forName(name);
-				@SuppressWarnings({ "rawtypes" })
+				@SuppressWarnings({ })
 				Constructor[] co = cl.getConstructors();
-				@SuppressWarnings("rawtypes")
-				Constructor picked = (Constructor)JOptionPane.showInputDialog(classLookingfor, "Pick a Constructor", "", JOptionPane.QUESTION_MESSAGE
+				this.keyPicked = (Constructor)JOptionPane.showInputDialog(classLookingfor, "Pick a Constructor", "", JOptionPane.QUESTION_MESSAGE
 		                , null, co, co[0]);
 				StringBuffer sb = new StringBuffer();
-				sb = constructorToXML.reflection(picked, sb);
+				sb = constructorToXML.reflection(keyPicked, sb);
 				MySAXApp handler = objectToXML.attempts(sb.toString());
 				KeyValuesPanel = handler.getTestPanel();
 				c.gridx = 2;
@@ -296,7 +290,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				 Font buttonFont = new Font(cf.getName(), cf.getStyle(), 12);
 				 updateButton.setFont(buttonFont);
 				 getButton.setEnabled(true);
-				 getButton.setActionCommand(ACTION_CALCULATE);
+				 getButton.setActionCommand(getButtonPushed);
 				 getButton.addActionListener(this);
 				 labelconstraints.fill = GridBagConstraints.SOUTH;
 				 labelconstraints.gridx = 0;
@@ -355,6 +349,19 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			revalidate();
 			repaint();
 		}
+		if (getButtonPushed.equals(e.getActionCommand())){
+			Component[] arrayofcomponets = KeyValuesPanel.getComponents();
+			ArrayList<Object> arrayofvalues = cleanComponents(arrayofcomponets);
+			System.out.println(arrayofvalues.toString());
+				
+			
+			//String stringToManipulate = sb.toString();
+			//String[] things = stringToManipulate.split("</array>");
+			//for (int i = 0; i < things.length; i++) {
+				//System.out.println(things[i]);
+			//}
+			
+		}
 	}
 	public void fillLisOfValuesPanel(@SuppressWarnings("rawtypes") Class given) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, InstantiationException{
 		new GridBagConstraints();
@@ -364,4 +371,120 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		final MySAXApp handler = objectToXML.attempts(sb.toString());
 		ListOfValuesPanel = handler.getTestPanel();
 }
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private ArrayList<Object> cleanComponents(Component[] componets){
+		ArrayList<Object> listOfObjects = new ArrayList();
+		Type[] classesweuse = keyPicked.getGenericParameterTypes();
+		for (int i = 0; i < classesweuse.length; i++) {
+			System.out.println(classesweuse);
+		}
+		int counter = 0;
+		for (int i = 0; i < componets.length; i++) {
+			if (componets[i].toString().contains("JFormattedTextField")){
+				System.out.println(componets[i].toString());
+				System.out.println(i);
+				if(componets[i+1].toString().contains("JFormattedTextField")){
+					//will make an array of all the values or is a date field. 
+					if(classesweuse[counter].toString().equals("class [I")){
+						int[] array = {Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
+						//need to move past the 5 values for the array, which should all be right next to each other so no need for anything else
+						i = i+4;
+						listOfObjects.add(array);
+						counter++;
+						}
+					if(classesweuse[counter].toString().equals("class [B")){
+						byte[] array = {Byte.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Byte.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Byte.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Byte.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Byte.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
+						//need to move past the 5 values
+						i = i+4;
+						listOfObjects.add(array);
+						counter++;
+					}
+					if(classesweuse[counter].toString().equals("class [C")){
+						char[] array = {Character.valueOf(((JFormattedTextField) componets[i]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString().charAt(0))};
+						//need to move past the 5 values
+						i = i+4;
+						listOfObjects.add(array);
+						counter++;
+					}
+					if(classesweuse[counter].toString().equals("class [S")){
+						short[] array ={Short.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Short.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Short.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Short.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Short.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
+						//need to move past the 5 values
+						i = i+4;
+						listOfObjects.add(array);
+						counter++;
+					}
+					if(classesweuse[counter].toString().equals("class [D")){
+						double[] array = {Double.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Double.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Double.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Double.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Double.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
+						//need to move past the 5 values
+						i = i+4;
+						listOfObjects.add(array);
+						counter++;
+					}
+					if(classesweuse[counter].toString().equals("class [F")){
+						float[] array = {Float.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Float.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Float.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Float.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Float.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
+						i = i+4;
+						listOfObjects.add(array);
+						counter++;
+					}
+					if(classesweuse[counter].toString().equals("class [L")){
+						long[] array = {Long.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Long.valueOf(((JFormattedTextField) componets[i+1]).getValue().toString()), Long.valueOf(((JFormattedTextField) componets[i+2]).getValue().toString()), Long.valueOf(((JFormattedTextField) componets[i+3]).getValue().toString()), Long.valueOf(((JFormattedTextField) componets[i+4]).getValue().toString())};
+						i = i+4;
+						listOfObjects.add(array);
+						counter++;
+					}
+					if(classesweuse[counter].toString().contains("java.util.Date")){
+						@SuppressWarnings("deprecation")
+						Date date = new Date(Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()));
+						i = i+2;
+						listOfObjects.add(date);
+						counter++;
+					}
+					if(classesweuse[counter].toString().contains("GregorianCalendar")){
+						GregorianCalendar calendar = new GregorianCalendar(Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) componets[i]).getValue().toString()));
+						i = i+2;
+						listOfObjects.add(calendar);
+						counter++;
+					}
+				}
+				else{
+					if(classesweuse[counter].toString().equals("int") || classesweuse[counter].toString().contains("Integer")){
+						Integer thing = new Integer(((JFormattedTextField) componets[i]).getValue().toString());
+						listOfObjects.add(thing);
+						counter++;
+					}
+					if(classesweuse[counter].toString().equals("double") || classesweuse[counter].toString().contains("Double")){
+						Double thing = new Double(((JFormattedTextField) componets[i]).getValue().toString());
+						listOfObjects.add(thing);
+						counter++;
+					}
+					if(classesweuse[counter].toString().equals("float") || classesweuse[counter].toString().contains("Float")){
+						Float thing = new Float(((JFormattedTextField) componets[i]).getValue().toString());
+						listOfObjects.add(thing);
+						counter++;
+					}
+					if(classesweuse[counter].toString().equals("long") || classesweuse[counter].toString().contains("Long")){
+						Long thing = new Long(((JFormattedTextField) componets[i]).getValue().toString());
+						listOfObjects.add(thing);
+						counter++;
+					}
+					if(classesweuse[counter].toString().equals("short") || classesweuse[counter].toString().contains("Short")){
+						Short thing = new Short(((JFormattedTextField) componets[i]).getValue().toString());
+						listOfObjects.add(thing);
+						counter++;
+					}
+					if(classesweuse[counter].toString().equals("byte") || classesweuse[counter].toString().contains("Byte")){
+						Byte thing = new Byte(((JFormattedTextField) componets[i]).getValue().toString());
+						listOfObjects.add(thing);
+						counter++;
+					}
+					if(classesweuse[counter].toString().equals("char") || classesweuse[counter].toString().contains("Character")){
+						Character thing = new Character(((JFormattedTextField) componets[i]).getValue().toString().charAt(0));
+						listOfObjects.add(thing);
+						counter++;
+					}
+				}
+			}
+		}
+		return listOfObjects;
+	}
 }
