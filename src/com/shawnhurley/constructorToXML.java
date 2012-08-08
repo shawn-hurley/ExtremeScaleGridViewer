@@ -18,7 +18,7 @@ public class constructorToXML {
 		        sb.append("</value>");
 		        sb.append("</stringfield>");
 			}
-			if (typeField.endsWith("java.lang.Byte") || typeField.endsWith("java.lang.Short") || typeField.endsWith("java.lang.Integer") || typeField.endsWith("java.lang.Long") || 
+			else if (typeField.endsWith("java.lang.Byte") || typeField.endsWith("java.lang.Short") || typeField.endsWith("java.lang.Integer") || typeField.endsWith("java.lang.Long") || 
 					typeField.endsWith("java.lang.Float") || typeField.endsWith("java.lang.Double") || typeField.endsWith("java.lang.Character") || typeField.endsWith("Boolean")) {
 				sb.append("<" + typeField.replace(".", "") + "field>");
 				sb.append("<name>");
@@ -29,7 +29,7 @@ public class constructorToXML {
 		        sb.append("</value>");
 				sb.append("</"+typeField.replace(".", "")+"field>");
 			}
-			if (typeField.endsWith("java.util.GregorianCalendar") || typeField.endsWith("java.util.Date")){
+			else if (typeField.endsWith("java.util.GregorianCalendar") || typeField.endsWith("java.util.Date")){
 				sb.append("<" + typeField.replace(".", "") + "field>");
 				sb.append("<name>"+typeField.replace("java.lang", "")+"</name>");
 				sb.append("<value>");
@@ -38,7 +38,7 @@ public class constructorToXML {
 				sb.append("<value> </value><value> </value>");
 				sb.append("</" + typeField.replace(".", "") + "field>");
 			}
-			if (typeField.contains("[")) {
+			else if (typeField.contains("[")) {
 				sb.append("<Arrayfield>");
 				//no other class should contain and [ in the name except for an array
 				if (typeField.contains("[I")){
@@ -100,7 +100,7 @@ public class constructorToXML {
 				}
 			sb.append("</Arrayfield>");
 			}
-			else{
+			else {
 				sb.append("<field>");
 				sb.append("<name>");
 				sb.append(typeField.toString());

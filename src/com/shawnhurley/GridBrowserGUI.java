@@ -353,7 +353,8 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			Component[] arrayofcomponets = KeyValuesPanel.getComponents();
 			ArrayList<Object> arrayofvalues = cleanComponents(arrayofcomponets);
 			try {
-				keyPicked.newInstance(arrayofvalues.toArray());
+				System.out.println(keyPicked.newInstance(arrayofvalues.toArray()).toString());
+				
 			} catch (IllegalArgumentException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -488,6 +489,11 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 					}
 					else if(classesweuse[counter].toString().equals("char") || classesweuse[counter].toString().contains("Character")){
 						Character thing = new Character(((JFormattedTextField) componets[i]).getValue().toString().charAt(0));
+						listOfObjects.add(thing);
+						counter++;
+					}
+					else if(classesweuse[counter].toString().contains("String")){
+						String thing = new String(((JFormattedTextField) componets[i]).getValue().toString());
 						listOfObjects.add(thing);
 						counter++;
 					}
