@@ -19,7 +19,7 @@ public class Bar {
 	public void setNumber(int number) {
 		this.number = number;
 	}
-	private int hello = 12;
-	private String hi = null;
-	int number  = 13;
+	private int hello;
+	private String hi;
+	int number;
 }

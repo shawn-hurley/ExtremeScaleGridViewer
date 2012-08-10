@@ -16,6 +16,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -31,7 +32,10 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	 private static final String refreshButtonPushed = "Calculate";
 	 private static final String getButtonPushed = "getButtonPushed";
-	 
+	 private static final String updateButtonPushed = "updateButtonPushed";
+	 private static final String removeButtonPushed = "removeButtonPushed";
+	 //TESTING ONLY**********
+	 HashMap hashmap = new HashMap();
 
 	 @SuppressWarnings("rawtypes")
 	private Constructor keyPicked;
@@ -218,7 +222,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		c.gridy = 4;
 	    requiredInputPanel.add(refreshButton, c);
 	}
-	@SuppressWarnings({ "null", "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public  void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
@@ -297,6 +301,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				 labelconstraints.gridy = 4;
 				 KeyValuesPanel.add(getButton, labelconstraints);
 				 updateButton.setEnabled(true);
+				 updateButton.setActionCommand(updateButtonPushed);
 				 updateButton.addActionListener(this);
 				 labelconstraints.fill = GridBagConstraints.SOUTH;
 				 labelconstraints.gridx = 1;
@@ -309,6 +314,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				  removeButton.setFont(buttonFont);
 				  invalidateButton.setFont(buttonFont);
 				  removeButton.setEnabled(true);
+				  removeButton.setActionCommand("updateButtonPushed");
 				  removeButton.addActionListener(this);
 				  labelconstraints.fill = GridBagConstraints.SOUTH;
 				  labelconstraints.gridx=0;
@@ -351,10 +357,52 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		}
 		if (getButtonPushed.equals(e.getActionCommand())){
 			Component[] arrayofcomponets = KeyValuesPanel.getComponents();
-			ArrayList<Object> arrayofvalues = cleanComponents(arrayofcomponets);
+			ArrayList<Object> arrayOfValuesForKeyClass = cleanComponents(arrayofcomponets, keyPicked);
 			try {
-				System.out.println(keyPicked.newInstance(arrayofvalues.toArray()).toString());
+				fillLisOfValuesPanel((Class) hashmap.get(keyPicked.newInstance(arrayOfValuesForKeyClass.toArray())).getClass());
 				
+			} catch (IllegalArgumentException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SecurityException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IllegalAccessException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InvocationTargetException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (NoSuchMethodException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InstantiationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if (removeButtonPushed.equals(e.getActionCommand())){
+			Component[] arrayofcomponets = KeyValuesPanel.getComponents();
+			ArrayList<Object> arrayOfValuesForKeyClass = cleanComponents(arrayofcomponets, keyPicked);
+			try {
+				hashmap.remove(keyPicked.newInstance(arrayOfValuesForKeyClass.toArray()));
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+			
+		if (updateButtonPushed.equals(e.getActionCommand())){
+			//Figure out how to get the constructor for the Value Class. 
+			Component[] arrayofcomponetsForKey = KeyValuesPanel.getComponents();
+			ArrayList<Object> arrayOfValueForKeyClass = cleanComponents(arrayofcomponetsForKey, keyPicked);
+			Object whatever;
+			try {
+				whatever = hashmap.get(keyPicked.newInstance(arrayOfValueForKeyClass.toArray()));
+				Component[] arrayofcomponetsForValue = ListOfValuesPanel.getComponents();
+				hashmap.put((keyPicked.newInstance(arrayOfValueForKeyClass.toArray())), objectPlusUpdates(whatever, arrayofcomponetsForValue));
 			} catch (IllegalArgumentException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -368,16 +416,15 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-				
-			
-			//String stringToManipulate = sb.toString();
-			//String[] things = stringToManipulate.split("</array>");
-			//for (int i = 0; i < things.length; i++) {
-				//System.out.println(things[i]);
-			//}
-			
 		}
 	}
+	
+
+	private Object objectPlusUpdates(Object whatever, Component[] components) {
+		
+		return null;
+	}
+
 	public void fillLisOfValuesPanel(@SuppressWarnings("rawtypes") Class given) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, InstantiationException{
 		new GridBagConstraints();
 		//will use the XMLReader and call MySAXApp to return the panel
@@ -387,9 +434,9 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		ListOfValuesPanel = handler.getTestPanel();
 }
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private ArrayList<Object> cleanComponents(Component[] componets){
+	private ArrayList<Object> cleanComponents(Component[] componets, Constructor constructor){
 		ArrayList<Object> listOfObjects = new ArrayList();
-		Type[] classesweuse = keyPicked.getGenericParameterTypes();
+		Type[] classesweuse = constructor.getGenericParameterTypes();
 		int counter = 0;
 		for (int i = 0; i < componets.length; i++) {
 			if (componets[i].toString().contains("JFormattedTextField")){
