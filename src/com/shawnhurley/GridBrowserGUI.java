@@ -356,6 +356,9 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			repaint();
 		}
 		if (getButtonPushed.equals(e.getActionCommand())){
+			GridBagConstraints c = new GridBagConstraints();
+			invalidate();
+			ListOfValuesPanel.removeAll();
 			Component[] arrayofcomponets = KeyValuesPanel.getComponents();
 			ArrayList<Object> arrayOfValuesForKeyClass = cleanComponents(arrayofcomponets, keyPicked);
 			try {
@@ -383,6 +386,15 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.gridx = 3;
+			c.gridy= 1;
+			ListOfValuesPanel.setBackground(Color.LIGHT_GRAY);
+			add(ListOfValuesPanel, c);
+			ListOfValuesPanel.validate();
+			ListOfValuesPanel.repaint();
+			revalidate();
+			repaint();
 		}
 		if (removeButtonPushed.equals(e.getActionCommand())){
 			Component[] arrayofcomponets = KeyValuesPanel.getComponents();
@@ -398,11 +410,11 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			//Figure out how to get the constructor for the Value Class. 
 			Component[] arrayofcomponetsForKey = KeyValuesPanel.getComponents();
 			ArrayList<Object> arrayOfValueForKeyClass = cleanComponents(arrayofcomponetsForKey, keyPicked);
-			Object whatever;
+			Object orginalObject;
 			try {
-				whatever = hashmap.get(keyPicked.newInstance(arrayOfValueForKeyClass.toArray()));
+				orginalObject = hashmap.get(keyPicked.newInstance(arrayOfValueForKeyClass.toArray()));
 				Component[] arrayofcomponetsForValue = ListOfValuesPanel.getComponents();
-				hashmap.put((keyPicked.newInstance(arrayOfValueForKeyClass.toArray())), objectPlusUpdates(whatever, arrayofcomponetsForValue));
+				hashmap.put((keyPicked.newInstance(arrayOfValueForKeyClass.toArray())), objectPlusUpdates(orginalObject, arrayofcomponetsForValue));
 			} catch (IllegalArgumentException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -420,9 +432,9 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	}
 	
 
-	private Object objectPlusUpdates(Object whatever, Component[] components) {
+	private Object objectPlusUpdates(Object originalObject, Component[] components) {
 		
-		return null;
+		return new Bar();
 	}
 
 	public void fillLisOfValuesPanel(@SuppressWarnings("rawtypes") Class given) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, InstantiationException{
