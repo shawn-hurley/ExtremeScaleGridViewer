@@ -412,30 +412,25 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			ArrayList<Object> arrayOfValueForKeyClass = cleanComponents(arrayofcomponetsForKey, keyPicked);
 			Object orginalObject;
 			try {
-				orginalObject = hashmap.get(keyPicked.newInstance(arrayOfValueForKeyClass.toArray()));
+				try{
+					orginalObject = hashmap.get(keyPicked.newInstance(arrayOfValueForKeyClass.toArray()));
+					System.out.println(orginalObject.toString());
+				} catch (Exception e1){
+					Class c = Class.forName(ValueClass.getText()); 
+					orginalObject = c.newInstance();
+				}
 				Component[] arrayofcomponetsForValue = ListOfValuesPanel.getComponents();
-				hashmap.put((keyPicked.newInstance(arrayOfValueForKeyClass.toArray())), objectPlusUpdates(orginalObject, arrayofcomponetsForValue));
+				hashmap.put((keyPicked.newInstance(arrayOfValueForKeyClass.toArray())), ObjectUpdater.update(orginalObject, arrayofcomponetsForValue, 0));
 			} catch (IllegalArgumentException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			} catch (InstantiationException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IllegalAccessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (InvocationTargetException e1) {
-				// TODO Auto-generated catch block
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
+			
 		}
 	}
 	
-
-	private Object objectPlusUpdates(Object originalObject, Component[] components) {
-		
-		return new Bar();
-	}
 
 	public void fillLisOfValuesPanel(@SuppressWarnings("rawtypes") Class given) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, InstantiationException{
 		new GridBagConstraints();
