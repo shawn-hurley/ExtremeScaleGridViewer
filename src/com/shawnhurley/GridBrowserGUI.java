@@ -274,7 +274,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		                , null, co, co[0]);
 				StringBuffer sb = new StringBuffer();
 				sb = constructorToXML.reflection(keyPicked, sb);
-				MySAXApp handler = objectToXML.attempts(sb.toString());
+				MySAXApp handler = ObjectToXML.attempts(sb.toString());
 				KeyValuesPanel = handler.getTestPanel();
 				c.gridx = 2;
 				c.gridy = 1;
@@ -419,8 +419,11 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 					Class c = Class.forName(ValueClass.getText()); 
 					orginalObject = c.newInstance();
 				}
+				Class c = Class.forName(ValueClass.getText()); 
+				orginalObject = c.newInstance();
 				Component[] arrayofcomponetsForValue = ListOfValuesPanel.getComponents();
-				hashmap.put((keyPicked.newInstance(arrayOfValueForKeyClass.toArray())), ObjectUpdater.update(orginalObject, arrayofcomponetsForValue, 0));
+				System.out.println(ObjectUpdater.update(orginalObject, arrayofcomponetsForValue, 0));
+				hashmap.put((keyPicked.newInstance(arrayOfValueForKeyClass.toArray())), ObjectUpdater.update(orginalObject, arrayofcomponetsForValue, 0).remove(0));
 			} catch (IllegalArgumentException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -436,8 +439,8 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		new GridBagConstraints();
 		//will use the XMLReader and call MySAXApp to return the panel
 		StringBuffer sb = null;
-		sb = objectToXML.reflection(given, sb);
-		final MySAXApp handler = objectToXML.attempts(sb.toString());
+		sb = ObjectToXML.reflection(given, sb);
+		final MySAXApp handler = ObjectToXML.attempts(sb.toString());
 		ListOfValuesPanel = handler.getTestPanel();
 }
 	@SuppressWarnings({ "rawtypes", "unchecked" })

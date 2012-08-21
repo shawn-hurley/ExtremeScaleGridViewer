@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
-public class objectToXML {
+public class ObjectToXML {
 	
 	private static Object array;
 	/**
