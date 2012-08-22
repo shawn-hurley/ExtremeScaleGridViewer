@@ -21,7 +21,7 @@ public class ObjectToXML {
 	 * @throws FileNotFoundException
 	 * @throws InstantiationException 
 	 */
-	public static StringBuffer reflection(Class c, StringBuffer sb)  throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, FileNotFoundException, InstantiationException{
+	public static StringBuffer reflection(Object object, StringBuffer sb)  throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, FileNotFoundException, InstantiationException{
 		int i;
 		boolean firstTimeThrough = true;
 		if(sb == null){
@@ -31,15 +31,23 @@ public class ObjectToXML {
 			firstTimeThrough = false;
 		}
 		sb.append("<objectfield>");
-		Object thing = c.newInstance();
+		System.out.println(object);
+		Class thing =  (Class) object.getClass();
 		if(firstTimeThrough){
 			//No need to add a name of a object twice, the only time to do this is when it is the first time through
-			sb.append("<name>"+c.toString()+"</name>");
+			sb.append("<name>"+object.toString()+"</name>");
 		}
-		Field newFields[]= c.getDeclaredFields();
+		Field newFields[]=  thing.getDeclaredFields();
 		sb.append("<fields>");
 		for(i=0; i<newFields.length; i++){	
 			Field aField = newFields[i];
+			 //AJ: First, check if this is a static field; if it is, we skip it because we don't support it. We don't support it because 
+            //AJ: static fields of Serialized classes (which WXS keys & values must be) are almost certain to be 
+            //AJ: declared with a value (like serialVersionUID, for example) and thus don't need to be set by us. We 
+            //AJ: never said we'd support every possible Java class, just the majority of them. 
+            if (Modifier.isStatic(aField.getModifiers()) ){
+                    continue; 
+            }
 			String typeField = aField.getType().toString();
 			if(typeField.startsWith("class ")){
 				int INDEX_WHERE_CLASSNAME_BEGINS = 6;	
@@ -47,8 +55,8 @@ public class ObjectToXML {
 					sb.append("<stringfield>");
 					sb.append("<name>"+aField.getName()+"</name>");
 					sb.append("<value>");
-					Method method = getMethod(aField, c);
-			        sb.append(method.invoke(thing, null));
+					Method method = getMethod(aField, thing);
+			        sb.append(method.invoke(object, null));
 			        sb.append("</value>");
 			        sb.append("</stringfield>");
 				}
@@ -59,8 +67,8 @@ public class ObjectToXML {
 					sb.append("<" + className + "field>");
 					sb.append("<name>"+aField.getName()+"</name>");
 					sb.append("<value>");
-					Method method = getMethod(aField, c);
-			        sb.append(method.invoke(thing, null).toString());
+					Method method = getMethod(aField, thing);
+			        sb.append(method.invoke(object, null).toString());
 			        sb.append("</value>");
 					sb.append("</" + className + "field>");
 				}
@@ -69,8 +77,8 @@ public class ObjectToXML {
 					sb.append("<" + className + "field>");
 					sb.append("<name>"+aField.getName()+"</name>");
 					sb.append("<value>");
-					Method method = getMethod(aField, c);
-					sb.append((((java.util.GregorianCalendar) method.invoke(thing, null)).getTime()));
+					Method method = getMethod(aField, thing);
+					sb.append((((java.util.GregorianCalendar) method.invoke(object, null)).getTime()));
 					sb.append("</value>");
 					sb.append("</" + className + "field>");
 
@@ -79,9 +87,9 @@ public class ObjectToXML {
 					sb.append("<Arrayfield>");
 					//no other class should contain and [ in the name except for an array
 					sb.append("<name>"+aField.getName()+"</name>");
-					Method method = getMethod(aField, c);
+					Method method = getMethod(aField, thing);
 					if (typeField.contains("[I")){
-					int [] array = (int[]) method.invoke(thing, null);
+					int [] array = (int[]) method.invoke(object, null);
 					for (int j = 0; j < array.length; j++) {
 						sb.append("<value>");
 						sb.append(array[j]);
@@ -89,7 +97,7 @@ public class ObjectToXML {
 					}
 					}
 					if (typeField.contains("[B")){
-						byte[] array = (byte[]) method.invoke(thing, null);
+						byte[] array = (byte[]) method.invoke(object, null);
 						for (int j = 0; j < array.length; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
@@ -97,7 +105,7 @@ public class ObjectToXML {
 						}
 					}
 					if (typeField.contains("[S")){
-						short[] array = (short[]) method.invoke(thing, null);
+						short[] array = (short[]) method.invoke(object, null);
 						for (int j = 0; j < array.length; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
@@ -105,7 +113,7 @@ public class ObjectToXML {
 						}
 					}
 					if (typeField.contains("[L")){
-						long[] array = (long[]) method.invoke(thing, null);
+						long[] array = (long[]) method.invoke(object, null);
 						for (int j = 0; j < array.length; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
@@ -113,7 +121,7 @@ public class ObjectToXML {
 						}
 					}
 					if (typeField.contains("F")){
-						float[] array = (float[]) method.invoke(thing, null);
+						float[] array = (float[]) method.invoke(object, null);
 						for (int j = 0; j < array.length; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
@@ -121,7 +129,7 @@ public class ObjectToXML {
 						}
 					}
 					if (typeField.contains("D")){
-						double[] array = (double[]) method.invoke(thing, null);
+						double[] array = (double[]) method.invoke(object, null);
 						for (int j = 0; j < array.length; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
@@ -129,7 +137,7 @@ public class ObjectToXML {
 						}
 					}
 					if (typeField.contains("C")){
-						char[] array = (char[]) method.invoke(thing, null);
+						char[] array = (char[]) method.invoke(object, null);
 						for (int j = 0; j < array.length; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
@@ -137,7 +145,7 @@ public class ObjectToXML {
 						}
 					}
 					else{ 
-						int[] array = (int[]) method.invoke(thing, null);
+						int[] array = (int[]) method.invoke(object, null);
 						for (int j = 0; j < array.length; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
@@ -148,10 +156,10 @@ public class ObjectToXML {
 					
 				}
 				else{
-					Method method = getMethod(aField, c);
+					Method method = getMethod(aField, thing);
 					sb.append("<name>"+aField.getName()+"</name>");
-					Object obj = method.invoke(thing, null);
-					reflection(obj.getClass(), sb);
+					Object obj = method.invoke(object, null);
+					reflection(obj, sb);
 				}
 			}
 			else{
@@ -161,8 +169,8 @@ public class ObjectToXML {
 				sb.append(aField.getName());
 				sb.append("</name>");
 				sb.append("<value>");
-				Method method = getMethod(aField, c);
-				sb.append(method.invoke(thing, null));
+				Method method = getMethod(aField, thing);
+				sb.append(method.invoke(object, null));
 				sb.append("</value>"); 
 				sb.append("</"+aField.getType()+"field>");
 				//method.invoke(thing, null);

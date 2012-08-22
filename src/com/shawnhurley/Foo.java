@@ -9,8 +9,6 @@ public class Foo {
 	private Bar bar = new Bar();
 	private String Testing = "Testing thirteen";
 	@SuppressWarnings("deprecation")
-	private Date date = new Date(86, 12, 19);
-	private GregorianCalendar datetry = new GregorianCalendar(1990, 6, 22);
 	private Integer somewhittyname = 1234;
 	private int[] arraytest = {1,2,3};
 	private int testingtwo = 12;
@@ -38,24 +36,14 @@ public class Foo {
 	public void setTesting(String Testing){
 		this.Testing = Testing;
 	}
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
+
 	public Integer getSomewhittyname() {
 		return somewhittyname;
 	}
 	public void setSomewhittyname(Integer somewhittyname) {
 		this.somewhittyname = somewhittyname;
 	}
-	public GregorianCalendar getDatetry() {
-		return datetry;
-	}
-	public void setDatetry(GregorianCalendar datetry) {
-		this.datetry = datetry;
-	}
+
 	public int[] getArraytest() {
 		return arraytest;
 	}

@@ -26,8 +26,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
-import com.sun.tools.javac.util.List;
-
 public class GridBrowserGUI extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	 private static final String refreshButtonPushed = "Calculate";
@@ -237,7 +235,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			try {
 				try {
 					try {
-						fillLisOfValuesPanel(Class.forName(ValueClass.getText()));
+						fillLisOfValuesPanel(Class.forName(ValueClass.getText()).newInstance());
 					} catch (InstantiationException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -362,7 +360,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			Component[] arrayofcomponets = KeyValuesPanel.getComponents();
 			ArrayList<Object> arrayOfValuesForKeyClass = cleanComponents(arrayofcomponets, keyPicked);
 			try {
-				fillLisOfValuesPanel((Class) hashmap.get(keyPicked.newInstance(arrayOfValuesForKeyClass.toArray())).getClass());
+				fillLisOfValuesPanel((hashmap.get(keyPicked.newInstance(arrayOfValuesForKeyClass.toArray()))));
 				
 			} catch (IllegalArgumentException e1) {
 				// TODO Auto-generated catch block
@@ -412,18 +410,11 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			ArrayList<Object> arrayOfValueForKeyClass = cleanComponents(arrayofcomponetsForKey, keyPicked);
 			Object orginalObject;
 			try {
-				try{
-					orginalObject = hashmap.get(keyPicked.newInstance(arrayOfValueForKeyClass.toArray()));
-					System.out.println(orginalObject.toString());
-				} catch (Exception e1){
-					Class c = Class.forName(ValueClass.getText()); 
-					orginalObject = c.newInstance();
-				}
 				Class c = Class.forName(ValueClass.getText()); 
 				orginalObject = c.newInstance();
 				Component[] arrayofcomponetsForValue = ListOfValuesPanel.getComponents();
-				System.out.println(ObjectUpdater.update(orginalObject, arrayofcomponetsForValue, 0));
-				hashmap.put((keyPicked.newInstance(arrayOfValueForKeyClass.toArray())), ObjectUpdater.update(orginalObject, arrayofcomponetsForValue, 0).remove(0));
+				Object newObject = ObjectUpdater.update(orginalObject, arrayofcomponetsForValue, 0).remove(0);
+				hashmap.put((keyPicked.newInstance(arrayOfValueForKeyClass.toArray())), newObject);
 			} catch (IllegalArgumentException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -435,11 +426,11 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	}
 	
 
-	public void fillLisOfValuesPanel(@SuppressWarnings("rawtypes") Class given) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, InstantiationException{
+	public void fillLisOfValuesPanel(@SuppressWarnings("rawtypes") Object object) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, InstantiationException{
 		new GridBagConstraints();
 		//will use the XMLReader and call MySAXApp to return the panel
 		StringBuffer sb = null;
-		sb = ObjectToXML.reflection(given, sb);
+		sb = ObjectToXML.reflection(object, sb);
 		final MySAXApp handler = ObjectToXML.attempts(sb.toString());
 		ListOfValuesPanel = handler.getTestPanel();
 }

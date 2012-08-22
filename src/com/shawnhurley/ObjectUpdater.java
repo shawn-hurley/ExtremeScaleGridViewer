@@ -18,7 +18,8 @@ public class ObjectUpdater {
 		int i;
 		Field classesweuse[]= c.getDeclaredFields();
 		int counter = 0;
-		for (i=k; i < components.length; i++) {
+		System.out.println(components.length);
+		for (i=k; i < components.length-1; i++) {
 				System.out.println(classesweuse[counter].getGenericType());
 				if (components[i].toString().contains("JFormattedTextField")){
 					if(components[i+1].toString().contains("JFormattedTextField")){
@@ -163,7 +164,7 @@ public class ObjectUpdater {
 		String firstletter = fieldname.substring(0, 1);
 		String restofstring = fieldname.substring(1);
 		String name = "set"+firstletter.toUpperCase()+restofstring;
-		Method method = c.getDeclaredMethod(name12);
+		Method method = c.getDeclaredMethod(name, field.getType());
 		return method;
 	}
 
