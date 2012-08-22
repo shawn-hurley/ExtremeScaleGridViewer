@@ -28,7 +28,7 @@ public class ObjectUpdater {
 							checkIfComponetsIsAtEnd = true;
 						}
 					} catch(Exception e1) {
-						//This will 
+						
 					}
 					if(checkIfComponetsIsAtEnd){
 					//will make an array of all the values or is a date field.
