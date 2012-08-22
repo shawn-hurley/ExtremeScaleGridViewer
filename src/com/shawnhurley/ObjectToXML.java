@@ -31,7 +31,6 @@ public class ObjectToXML {
 			firstTimeThrough = false;
 		}
 		sb.append("<objectfield>");
-		System.out.println(object);
 		Class thing =  (Class) object.getClass();
 		if(firstTimeThrough){
 			//No need to add a name of a object twice, the only time to do this is when it is the first time through

@@ -18,11 +18,19 @@ public class ObjectUpdater {
 		int i;
 		Field classesweuse[]= c.getDeclaredFields();
 		int counter = 0;
+		boolean checkIfComponetsIsAtEnd = false;
 		System.out.println(components.length);
-		for (i=k; i < components.length-1; i++) {
+		for (i=k; i < components.length; i++) {
 				System.out.println(classesweuse[counter].getGenericType());
-				if (components[i].toString().contains("JFormattedTextField")){
-					if(components[i+1].toString().contains("JFormattedTextField")){
+				if(components[i].toString().contains("JFormattedTextField")){
+					try{
+						if(components[i+1].toString().contains("JFormattedTextField")){
+							checkIfComponetsIsAtEnd = true;
+						}
+					} catch(Exception e1) {
+						//This will 
+					}
+					if(checkIfComponetsIsAtEnd){
 					//will make an array of all the values or is a date field.
 						if(classesweuse[counter].getGenericType().toString().equals("class [I")){
 							int[] array = {Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) components[i+1]).getValue().toString()), Integer.valueOf(((JFormattedTextField) components[i+2]).getValue().toString()), Integer.valueOf(((JFormattedTextField) components[i+3]).getValue().toString()), Integer.valueOf(((JFormattedTextField) components[i+4]).getValue().toString())};
@@ -92,7 +100,6 @@ public class ObjectUpdater {
 					        method.invoke(originalObject, calendar);
 							counter++;
 						}
-	
 					}
 					else{
 						if(classesweuse[counter].getGenericType().toString().equals("int") || classesweuse[counter].getGenericType().toString().contains("Integer")){
@@ -151,13 +158,13 @@ public class ObjectUpdater {
 							i = (Integer) newObject.remove(0);
 						}
 					}
-				}
+			}	
 		}
 		ArrayList<Object> list = new ArrayList<Object>();
 		list.add(originalObject);
 		list.add(Integer.valueOf(i));
 		return list; 	
-	}
+		}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Method getMethod(Field field, Class c) throws SecurityException, NoSuchMethodException{
 		String fieldname = field.getName();
@@ -167,5 +174,4 @@ public class ObjectUpdater {
 		Method method = c.getDeclaredMethod(name, field.getType());
 		return method;
 	}
-
 }
