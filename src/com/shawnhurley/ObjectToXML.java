@@ -10,8 +10,8 @@ public class ObjectToXML {
 	private static Object array;
 	/**
 	 * Author: Shawn Hurley
-	 * This is a utility function that is used to make a string buffer, as well as set up SAXX app handler that
-	 * allows you to get a Panel with layout. 
+	 * This is a utility function that is used to make an xml string buffer from an object so that we can display the values and fields of that object. We will do this by going through
+	 * each declared field and calling the get method on it, and putting that all in an xml format to be output as an String Buffer
 	 * @return
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
@@ -42,8 +42,7 @@ public class ObjectToXML {
 			Field aField = newFields[i];
 			 //AJ: First, check if this is a static field; if it is, we skip it because we don't support it. We don't support it because 
             //AJ: static fields of Serialized classes (which WXS keys & values must be) are almost certain to be 
-            //AJ: declared with a value (like serialVersionUID, for example) and thus don't need to be set by us. We 
-            //AJ: never said we'd support every possible Java class, just the majority of them. 
+            //AJ: declared with a value (like serialVersionUID, for example) and thus don't need to be set by us.
             if (Modifier.isStatic(aField.getModifiers()) ){
                     continue; 
             }
@@ -192,7 +191,6 @@ public class ObjectToXML {
 	public static MySAXApp attempts(String sb) throws IOException{
 		ByteArrayInputStream inputstream = new ByteArrayInputStream(sb.getBytes());
 		try {
-			//book of four pattern go look up
 			XMLReader xr = XMLReaderFactory.createXMLReader();
 			MySAXApp handler = new MySAXApp();
 			xr.setContentHandler(handler);

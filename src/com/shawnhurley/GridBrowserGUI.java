@@ -27,12 +27,18 @@ import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
 public class GridBrowserGUI extends JPanel implements ActionListener{
+	/*
+	 * Description: This class will be used to implement the entire GUI
+	 * 
+	 * 
+	 */
+	
 	private static final long serialVersionUID = 1L;
 	 private static final String refreshButtonPushed = "Calculate";
 	 private static final String getButtonPushed = "getButtonPushed";
 	 private static final String updateButtonPushed = "updateButtonPushed";
 	 private static final String removeButtonPushed = "removeButtonPushed";
-	 //TESTING ONLY**********
+	
 	 HashMap hashmap = new HashMap();
 
 	 @SuppressWarnings("rawtypes")
@@ -87,7 +93,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		requiredInputPanel = new JPanel(new GridBagLayout());
 		KeyValuesPanel = new JPanel(new GridBagLayout());
 		ListOfValuesPanel = new JPanel(new GridBagLayout());
-		
+		//This will put the Title at the top of the screen, it calls a method to fill the panel then adds the panel once that is one 
 		fillYourEntryTitlePanel();
 		c.fill = GridBagConstraints.FIRST_LINE_START;
 		//c.anchor = GridBagConstraints.VERTICAL;
@@ -96,29 +102,13 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		EntryTitlePanel.setBackground(Color.ORANGE);
 		add(EntryTitlePanel,c);
 		
-		//Put Components within requiredInputPanel, then place it in main panel ("this")
+		//Put Components within requiredInputPanel, then place it in main panel 
 		fillyourRequiredInputPanel();
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx=1;
 		c.gridy=1;
 		requiredInputPanel.setBackground(Color.GRAY);
 		add(requiredInputPanel,c);
-		
-
-		//Put components in ListOfValues
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 2;
-		c.gridy= 1;
-		ListOfValuesPanel.setBackground(Color.BLUE);
-		add(ListOfValuesPanel,c);
-		
-		//Put components in KeyValuePanel
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 0;
-		c.gridy = 2;
-		KeyValuesPanel.setBackground(Color.cyan);
-		add(KeyValuesPanel,c);
-		
 		
 	}
 	//private void loadProps() {
@@ -132,7 +122,9 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	//}
 	
 	private void fillYourEntryTitlePanel(){
-		//create a GridBagConstraints object we can reuse when adding componet
+		/*
+		 * Description: Will add all the components to Title Panel. Will use its own GridBagConstraints.
+		 */
 		GridBagConstraints c = new GridBagConstraints();
 		
 		//add the label
@@ -145,7 +137,9 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	}
 	
 	private void fillyourRequiredInputPanel(){
-		//create a GridBagConstraints object we can reuse when adding componet
+		/*
+		 * Will add all the components to the Required Panel, Each one should have its Label and TextField that must be there and must have a valid entry
+		 */
 		GridBagConstraints c = new GridBagConstraints();
 		
 		//add the label
@@ -222,62 +216,43 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public  void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		/*
+		 * Description: This is where we wait for the action to be performed, First by the Refresh button which will be the only button present but later listening
+		 * for the Get, Update, Remove, and Invalidate Button
+		 */
 		
 		if (refreshButtonPushed.equals(e.getActionCommand())){
+			//Must let the GUI know that it will be changed and removing all the parts of KeyValues and ListOfValues 
 			invalidate();
 			KeyValuesPanel.removeAll();
 			ListOfValuesPanel.removeAll();
-			
+			//Making Two Constraints one for the what the key values will need and one for the the bottom of the panel of the buttons
 			GridBagConstraints c = new GridBagConstraints();
 			GridBagConstraints labelconstraints = new GridBagConstraints();
 			
 			try {
-				try {
-					try {
-						fillLisOfValuesPanel(Class.forName(ValueClass.getText()).newInstance());
-					} catch (InstantiationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				} catch (ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
-					JOptionPane.showMessageDialog(null, "Value Class not found, pleas select again");
-				}
-			} catch (IllegalArgumentException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (SecurityException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IllegalAccessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (InvocationTargetException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (NoSuchMethodException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				//this will send the an instance of the of the Value Class to the fillLisOfValuesPanel 
+				fillLisOfValuesPanel(Class.forName(ValueClass.getText()).newInstance());
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage());
 			}
-			String name = classLookingfor.getText();
+			
 			try {
-				Class<?> cl = Class.forName(name);
-				@SuppressWarnings({ })
+				//Need to get the from the text
+				Class<?> cl = Class.forName(classLookingfor.getText());
+				//The array of constructors for the class
 				Constructor[] co = cl.getConstructors();
 				this.keyPicked = (Constructor)JOptionPane.showInputDialog(classLookingfor, "Pick a Constructor", "", JOptionPane.QUESTION_MESSAGE
 		                , null, co, co[0]);
 				StringBuffer sb = new StringBuffer();
+				//Making the xml document that will also make the panel and then adding the panel
 				sb = constructorToXML.reflection(keyPicked, sb);
 				MySAXApp handler = ObjectToXML.attempts(sb.toString());
 				KeyValuesPanel = handler.getTestPanel();
 				c.gridx = 2;
 				c.gridy = 1;
 				//We need to add the Label at the Top as well as the buttons. 
-				JLabel KeyValuesPanelLabel = new JLabel("Keys");
+				JLabel KeyValuesPanelLabel = new JLabel("Key");
 				Font labelfont = KeyValuesPanelLabel.getFont();
 				KeyValuesPanelLabel.setFont(new Font(labelfont.getName(), 25, 25));
 				labelconstraints.fill = GridBagConstraints.NORTH;
@@ -327,18 +302,9 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				add(KeyValuesPanel, c);
 			
 			}
-			catch (ClassNotFoundException e1) {
+			catch (Exception e1) {
 				// TODO Auto-generated catch block
-				JOptionPane.showMessageDialog(null, "Key Class not found, pleas select again");
-			} catch (IllegalArgumentException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (SecurityException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage());
 			}
 			
 			c.fill = GridBagConstraints.VERTICAL;
@@ -346,6 +312,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			c.gridy= 1;
 			ListOfValuesPanel.setBackground(Color.LIGHT_GRAY);
 			add(ListOfValuesPanel,c);
+			//Letting the GUI know that it is now valid and repaint it
 			ListOfValuesPanel.validate();
 			ListOfValuesPanel.repaint();
 			KeyValuesPanel.validate();
@@ -354,6 +321,10 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			repaint();
 		}
 		if (getButtonPushed.equals(e.getActionCommand())){
+			/*
+			 * Description: When the button is pressed we will clean the key panel, make that an object. then get the object using WXS or hashmap and then put that into the the filllistovalues panel which will display it.
+			 * 
+			 */
 			GridBagConstraints c = new GridBagConstraints();
 			invalidate();
 			ListOfValuesPanel.removeAll();
@@ -362,27 +333,9 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			try {
 				fillLisOfValuesPanel((hashmap.get(keyPicked.newInstance(arrayOfValuesForKeyClass.toArray()))));
 				
-			} catch (IllegalArgumentException e1) {
+			} catch (Exception e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (SecurityException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IllegalAccessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (InvocationTargetException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (NoSuchMethodException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (InstantiationException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				
 			}
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.gridx = 3;
@@ -395,17 +348,23 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			repaint();
 		}
 		if (removeButtonPushed.equals(e.getActionCommand())){
+			/*
+			 * Description: When pushed will take the key and then remove the value asscoiated with that key
+			 */
 			Component[] arrayofcomponets = KeyValuesPanel.getComponents();
 			ArrayList<Object> arrayOfValuesForKeyClass = cleanComponents(arrayofcomponets, keyPicked);
 			try {
 				hashmap.remove(keyPicked.newInstance(arrayOfValuesForKeyClass.toArray()));
 			} catch (Exception e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+
 			}
 		}
 			
 		if (updateButtonPushed.equals(e.getActionCommand())){
-			//Figure out how to get the constructor for the Value Class. 
+			/*
+			 * Description: When pushed it will take the Value panel and all the values update the object, then put the object into the map with the key as the key
+			 */
 			Component[] arrayofcomponetsForKey = KeyValuesPanel.getComponents();
 			ArrayList<Object> arrayOfValueForKeyClass = cleanComponents(arrayofcomponetsForKey, keyPicked);
 			Object orginalObject;
@@ -415,11 +374,9 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				Component[] arrayofcomponetsForValue = ListOfValuesPanel.getComponents();
 				Object newObject = ObjectUpdater.update(orginalObject, arrayofcomponetsForValue, 0).remove(0);
 				hashmap.put((keyPicked.newInstance(arrayOfValueForKeyClass.toArray())), newObject);
-			} catch (IllegalArgumentException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
 			} catch (Exception e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+
 			}
 			
 		}
@@ -427,6 +384,9 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	
 
 	public void fillLisOfValuesPanel(@SuppressWarnings("rawtypes") Object object) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, InstantiationException{
+		/*
+		 * Description: This will fill the values panel it will pass an object to the ObjectToXML and then get the panel and make it the right panel
+		 */
 		new GridBagConstraints();
 		//will use the XMLReader and call MySAXApp to return the panel
 		StringBuffer sb = null;
@@ -436,6 +396,9 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 }
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private ArrayList<Object> cleanComponents(Component[] componets, Constructor constructor){
+		/*
+		 * Description: This will take the constructor chosen for the Key class as well as the componets for that class and make the object using them. 
+		 */
 		ArrayList<Object> listOfObjects = new ArrayList();
 		Type[] classesweuse = constructor.getGenericParameterTypes();
 		int counter = 0;

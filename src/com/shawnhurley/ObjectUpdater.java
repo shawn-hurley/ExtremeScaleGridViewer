@@ -12,6 +12,9 @@ import java.util.GregorianCalendar;
 import javax.swing.JFormattedTextField;
 
 public class ObjectUpdater {
+	/*
+	 * This class is to update the object. it will take the object that is given to it and the components, figure out which type of primative or class it is, then it will update it using the set method
+	 */
 	@SuppressWarnings("rawtypes")
 	public static ArrayList update(Object originalObject, Component[] components, int k) throws RuntimeException, NoSuchMethodException, IllegalAccessException, InvocationTargetException{
 		Class<? extends Object> c = originalObject.getClass();
