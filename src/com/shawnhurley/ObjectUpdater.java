@@ -26,10 +26,10 @@ public class ObjectUpdater {
 				if(components[i].toString().contains("JFormattedTextField")){
 					try{
 						if(components[i+1].toString().contains("JFormattedTextField")){
-							
+							checkIfComponetsIsAtEnd = true;
 						}
 					} catch(Exception e1) {
-						checkIfComponetsIsAtEnd = true;
+						
 					}
 					if(checkIfComponetsIsAtEnd){
 					//will make an array of all the values or is a date field.
@@ -176,7 +176,12 @@ public class ObjectUpdater {
 							}
 
 						}
-					}
+				}
+			}
+			try{
+				classesweuse[counter].toString();
+			} catch (Exception e1){
+				break;
 			}
 		}
 		System.out.println("end of file");
