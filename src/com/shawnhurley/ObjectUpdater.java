@@ -22,16 +22,14 @@ public class ObjectUpdater {
 		Field classesweuse[]= c.getDeclaredFields();
 		int counter = 0;
 		boolean checkIfComponetsIsAtEnd = false;
-		System.out.println(components.length);
 		for (i=k; i < components.length; i++) {
-				System.out.println(classesweuse[counter].getGenericType());
 				if(components[i].toString().contains("JFormattedTextField")){
 					try{
 						if(components[i+1].toString().contains("JFormattedTextField")){
-							checkIfComponetsIsAtEnd = true;
+							
 						}
 					} catch(Exception e1) {
-						
+						checkIfComponetsIsAtEnd = true;
 					}
 					if(checkIfComponetsIsAtEnd){
 					//will make an array of all the values or is a date field.
@@ -154,15 +152,34 @@ public class ObjectUpdater {
 							counter++;
 						}
 						else{
-							ArrayList newObject = update(originalObject, components, i);
-							Method method = getMethod(classesweuse[counter], c);
-							method.invoke(originalObject, newObject.remove(0));
-							counter++;
-							i = (Integer) newObject.remove(0);
+							//System.out.println("Value of i before recursion " + i);
+							//Need to get the Bar there not the orginalObject or rather whatever class that we dont know
+							String stringForClass;
+							ArrayList newObject;
+							try {
+								stringForClass = classesweuse[counter].getGenericType().toString();
+								stringForClass = stringForClass.replace("class ", "");
+								Class newClass = Class.forName(stringForClass);
+								newObject = update(newClass.newInstance(), components, i);
+								Method method = getMethod(classesweuse[counter], c);
+								method.invoke(originalObject, newObject.remove(0));
+								System.out.println(newObject.get(0));
+								counter++;
+								i = (Integer) newObject.remove(0);
+								System.out.println(i);
+							} catch (InstantiationException e) {
+								 //TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ClassNotFoundException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 						}
 					}
-			}	
+			}
 		}
+		System.out.println("end of file");
 		ArrayList<Object> list = new ArrayList<Object>();
 		list.add(originalObject);
 		list.add(Integer.valueOf(i));

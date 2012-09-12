@@ -234,7 +234,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				//this will send the an instance of the of the Value Class to the fillLisOfValuesPanel 
 				fillLisOfValuesPanel(Class.forName(ValueClass.getText()).newInstance());
 			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(ValueClass, e1.getMessage()+" "+e1.getLocalizedMessage());
+				JOptionPane.showMessageDialog(null, e1.getMessage());
 			}
 			
 			try {
@@ -304,7 +304,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			}
 			catch (Exception e1) {
 				// TODO Auto-generated catch block
-				JOptionPane.showMessageDialog(classLookingfor, e1.getMessage());
+				JOptionPane.showMessageDialog(null, e1.getMessage());
 			}
 			
 			c.fill = GridBagConstraints.VERTICAL;
@@ -335,7 +335,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
-				JOptionPane.showMessageDialog(getButton, e1.getMessage());
+				
 			}
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.gridx = 3;
@@ -356,7 +356,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 			try {
 				hashmap.remove(keyPicked.newInstance(arrayOfValuesForKeyClass.toArray()));
 			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(removeButton, e1.getMessage());
+				JOptionPane.showMessageDialog(null, e1.getMessage());
 
 			}
 		}
@@ -372,10 +372,10 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 				Class c = Class.forName(ValueClass.getText()); 
 				orginalObject = c.newInstance();
 				Component[] arrayofcomponetsForValue = ListOfValuesPanel.getComponents();
-				Object newObject = ObjectUpdater.update(orginalObject, arrayofcomponetsForValue, 0).remove(0);
+				Object newObject = (ObjectUpdater.update(orginalObject, arrayofcomponetsForValue, 0)).remove(0);
 				hashmap.put((keyPicked.newInstance(arrayOfValueForKeyClass.toArray())), newObject);
 			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(updateButton, e1.getMessage());
+				JOptionPane.showMessageDialog(requiredInputPanel, e1.getMessage());
 
 			}
 			
