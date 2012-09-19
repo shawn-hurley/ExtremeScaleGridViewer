@@ -2,7 +2,9 @@ package com.shawnhurley;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -93,7 +95,12 @@ public class ObjectToXML {
 					sb.append("<name>"+aField.getName()+"</name>");
 					sb.append("<value>");
 					Method method = getMethod(aField, thing);
-					sb.append((((java.util.GregorianCalendar) method.invoke(object, null)).getTime()));
+					GregorianCalendar calendar = (((java.util.GregorianCalendar) method.invoke(object, null)));
+					sb.append((calendar.get(Calendar.YEAR)));
+					sb.append("</value><value>");
+					sb.append(calendar.get(Calendar.MONTH)+1);
+					sb.append("</value><value>");
+					sb.append(calendar.get(Calendar.DAY_OF_MONTH));
 					sb.append("</value>");
 					sb.append("</" + className + "field>");
 

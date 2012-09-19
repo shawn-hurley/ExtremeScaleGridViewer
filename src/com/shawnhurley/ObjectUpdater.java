@@ -107,8 +107,9 @@ public class ObjectUpdater {
 							counter++;
 							checkIfComponetsIsAtEnd = false;
 						}
-						else if(classesweuse[counter].getGenericType().toString().contains("GregorianCalendar")){
-							GregorianCalendar calendar = new GregorianCalendar(Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString()));
+						else if(classesweuse[counter].getGenericType().toString().contains("java.util.GregorianCalendar")){
+							GregorianCalendar calendar = new GregorianCalendar();
+							calendar.set((Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString())), ((Integer.valueOf(((JFormattedTextField) components[i+1]).getValue().toString()))-1), (Integer.valueOf(((JFormattedTextField) components[i+2]).getValue().toString())));
 							i = i+2;
 							Method method = getMethod(classesweuse[counter], c);
 					        method.invoke(originalObject, calendar);
