@@ -2,6 +2,7 @@ package com.shawnhurley;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.Arrays;
+import java.util.Date;
 
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -21,6 +22,7 @@ public class ObjectToXML {
 	 * @throws FileNotFoundException
 	 * @throws InstantiationException 
 	 */
+	@SuppressWarnings("deprecation")
 	public static StringBuffer reflection(Object object, StringBuffer sb)  throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, FileNotFoundException, InstantiationException{
 		int i;
 		boolean firstTimeThrough = true;
@@ -58,8 +60,7 @@ public class ObjectToXML {
 			        sb.append("</value>");
 			        sb.append("</stringfield>");
 				}
-				else if (typeField.endsWith("java.util.Date") || typeField.endsWith("java.lang.Byte")
-						|| typeField.endsWith("java.lang.Short") || typeField.endsWith("java.lang.Integer") || typeField.endsWith("java.lang.Long") || 
+				else if (typeField.endsWith("java.lang.Byte") || typeField.endsWith("java.lang.Short") || typeField.endsWith("java.lang.Integer") || typeField.endsWith("java.lang.Long") || 
 						typeField.endsWith("java.lang.Float") || typeField.endsWith("java.lang.Double") || typeField.endsWith("java.lang.Character") || typeField.endsWith("Boolean")) {
 					String className = typeField.substring(INDEX_WHERE_CLASSNAME_BEGINS).replace(".", "");
 					sb.append("<" + className + "field>");
@@ -69,6 +70,22 @@ public class ObjectToXML {
 			        sb.append(method.invoke(object, null).toString());
 			        sb.append("</value>");
 					sb.append("</" + className + "field>");
+				}
+				else if (typeField.endsWith("java.util.Date")){
+					String className = typeField.substring(INDEX_WHERE_CLASSNAME_BEGINS).replace(".", "");
+					sb.append("<"+className+ "field>");
+					sb.append("<name>"+aField.getName()+"</name>");
+					sb.append("<value>");
+					Method method = getMethod(aField, thing);
+					Date newDate = (java.util.Date) method.invoke(object, null);
+					sb.append(newDate.getYear());
+					sb.append("</value>");
+					sb.append("<value>");
+					sb.append(newDate.getMonth()+1);
+					sb.append("</value><value>");
+					sb.append(newDate.getDate());
+					sb.append("</value>");
+					sb.append("</"+className+"field>");
 				}
 				else if (typeField.endsWith("java.util.GregorianCalendar")) {
 					String className = typeField.substring(INDEX_WHERE_CLASSNAME_BEGINS).replace(".", "");
@@ -88,15 +105,20 @@ public class ObjectToXML {
 					Method method = getMethod(aField, thing);
 					if (typeField.contains("[I")){
 					int [] array = (int[]) method.invoke(object, null);
-					for (int j = 0; j < array.length; j++) {
+					for (int j = 0; j < 5; j++) {
 						sb.append("<value>");
-						sb.append(array[j]);
+						try{
+							sb.append(array[j]);	
+						} catch (Exception e1){
+							sb.append("0</value>");
+							continue;
+						}
 						sb.append("</value>");
 					}
 					}
 					if (typeField.contains("[B")){
 						byte[] array = (byte[]) method.invoke(object, null);
-						for (int j = 0; j < array.length; j++) {
+						for (int j = 0; j < 5; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
 							sb.append("</value>");
@@ -104,7 +126,7 @@ public class ObjectToXML {
 					}
 					if (typeField.contains("[S")){
 						short[] array = (short[]) method.invoke(object, null);
-						for (int j = 0; j < array.length; j++) {
+						for (int j = 0; j < 5; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
 							sb.append("</value>");
@@ -112,7 +134,7 @@ public class ObjectToXML {
 					}
 					if (typeField.contains("[L")){
 						long[] array = (long[]) method.invoke(object, null);
-						for (int j = 0; j < array.length; j++) {
+						for (int j = 0; j < 5; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
 							sb.append("</value>");
@@ -120,7 +142,7 @@ public class ObjectToXML {
 					}
 					if (typeField.contains("F")){
 						float[] array = (float[]) method.invoke(object, null);
-						for (int j = 0; j < array.length; j++) {
+						for (int j = 0; j < 5; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
 							sb.append("</value>");
@@ -128,7 +150,7 @@ public class ObjectToXML {
 					}
 					if (typeField.contains("D")){
 						double[] array = (double[]) method.invoke(object, null);
-						for (int j = 0; j < array.length; j++) {
+						for (int j = 0; j < 5; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
 							sb.append("</value>");
@@ -136,20 +158,20 @@ public class ObjectToXML {
 					}
 					if (typeField.contains("C")){
 						char[] array = (char[]) method.invoke(object, null);
-						for (int j = 0; j < array.length; j++) {
+						for (int j = 0; j < 5; j++) {
 							sb.append("<value>");
 							sb.append(array[j]);
 							sb.append("</value>");
 						}
 					}
-					else{ 
-						int[] array = (int[]) method.invoke(object, null);
-						for (int j = 0; j < array.length; j++) {
-							sb.append("<value>");
-							sb.append(array[j]);
-							sb.append("</value>");
-						}
-					}
+//					else{ 
+//						int[] array = (int[]) method.invoke(object, null);
+//						for (int j = 0; j < 5; j++) {
+//							sb.append("<value>");
+//							sb.append(array[j]);
+//							sb.append("</value>");
+//						}
+					//}
 					sb.append("</Arrayfield>");
 					
 				}

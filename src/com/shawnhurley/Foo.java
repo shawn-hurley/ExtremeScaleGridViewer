@@ -12,6 +12,14 @@ public class Foo {
 	private Integer somewhittyname = 1234;
 	private int[] arraytest = {1,2,3};
 	private int testingtwo = 12;
+	@SuppressWarnings("deprecation")
+	private Date date = new Date(2011, 2, 23);
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
 	public int getHello() {
 		return hello;
 	}

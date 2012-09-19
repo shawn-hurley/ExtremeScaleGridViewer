@@ -15,7 +15,7 @@ public class ObjectUpdater {
 	/*
 	 * This class is to update the object. it will take the object that is given to it and the components, figure out which type of primative or class it is, then it will update it using the set method
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "deprecation" })
 	public static ArrayList update(Object originalObject, Component[] components, int k) throws RuntimeException, NoSuchMethodException, IllegalAccessException, InvocationTargetException{
 		Class<? extends Object> c = originalObject.getClass();
 		int i;
@@ -40,6 +40,7 @@ public class ObjectUpdater {
 							Method method = getMethod(classesweuse[counter], c);
 							method.invoke(originalObject, array);
 							counter++;
+							checkIfComponetsIsAtEnd = false;
 						}
 						else if(classesweuse[counter].getGenericType().toString().equals("class [B")){
 							byte[] array = {Byte.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Byte.valueOf(((JFormattedTextField) components[i+1]).getValue().toString()), Byte.valueOf(((JFormattedTextField) components[i+2]).getValue().toString()), Byte.valueOf(((JFormattedTextField) components[i+3]).getValue().toString()), Byte.valueOf(((JFormattedTextField) components[i+4]).getValue().toString())};
@@ -48,6 +49,7 @@ public class ObjectUpdater {
 							Method method = getMethod(classesweuse[counter], c);
 					        method.invoke(originalObject, array);
 							counter++;
+							checkIfComponetsIsAtEnd = false;
 						}
 						else if(classesweuse[counter].getGenericType().toString().equals("class [C")){
 							char[] array = {Character.valueOf(((JFormattedTextField) components[i]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) components[i+1]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) components[i+2]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) components[i+3]).getValue().toString().charAt(0)), Character.valueOf(((JFormattedTextField) components[i+4]).getValue().toString().charAt(0))};
@@ -56,6 +58,7 @@ public class ObjectUpdater {
 							Method method = getMethod(classesweuse[counter], c);
 					        method.invoke(originalObject, array);
 							counter++;
+							checkIfComponetsIsAtEnd = false;
 						}
 						else if(classesweuse[counter].getGenericType().toString().equals("class [S")){
 							short[] array ={Short.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Short.valueOf(((JFormattedTextField) components[i+1]).getValue().toString()), Short.valueOf(((JFormattedTextField) components[i+2]).getValue().toString()), Short.valueOf(((JFormattedTextField) components[i+3]).getValue().toString()), Short.valueOf(((JFormattedTextField) components[i+4]).getValue().toString())};
@@ -64,6 +67,7 @@ public class ObjectUpdater {
 							Method method = getMethod(classesweuse[counter], c);
 					        method.invoke(originalObject, array);
 							counter++;
+							checkIfComponetsIsAtEnd = false;
 						}
 						else if(classesweuse[counter].getGenericType().toString().equals("class [D")){
 							double[] array = {Double.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Double.valueOf(((JFormattedTextField) components[i+1]).getValue().toString()), Double.valueOf(((JFormattedTextField) components[i+2]).getValue().toString()), Double.valueOf(((JFormattedTextField) components[i+3]).getValue().toString()), Double.valueOf(((JFormattedTextField) components[i+4]).getValue().toString())};
@@ -72,12 +76,15 @@ public class ObjectUpdater {
 							Method method = getMethod(classesweuse[counter], c);
 					        method.invoke(originalObject, array);
 							counter++;
+							checkIfComponetsIsAtEnd = false;
 						}
 						else if(classesweuse[counter].getGenericType().toString().equals("class [F")){
 							float[] array = {Float.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Float.valueOf(((JFormattedTextField) components[i+1]).getValue().toString()), Float.valueOf(((JFormattedTextField) components[i+2]).getValue().toString()), Float.valueOf(((JFormattedTextField) components[i+3]).getValue().toString()), Float.valueOf(((JFormattedTextField) components[i+4]).getValue().toString())};
 							i = i+4;
 							Method method = getMethod(classesweuse[counter], c);
-					        method.invoke(originalObject, array);						counter++;
+					        method.invoke(originalObject, array);						
+					        counter++;
+					        checkIfComponetsIsAtEnd = false;
 						}
 						else if(classesweuse[counter].getGenericType().toString().equals("class [L")){
 							long[] array = {Long.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Long.valueOf(((JFormattedTextField) components[i+1]).getValue().toString()), Long.valueOf(((JFormattedTextField) components[i+2]).getValue().toString()), Long.valueOf(((JFormattedTextField) components[i+3]).getValue().toString()), Long.valueOf(((JFormattedTextField) components[i+4]).getValue().toString())};
@@ -85,14 +92,20 @@ public class ObjectUpdater {
 							Method method = getMethod(classesweuse[counter], c);
 					        method.invoke(originalObject, array);						
 					        counter++;
+					        checkIfComponetsIsAtEnd = false;
 						}
 						else if(classesweuse[counter].getGenericType().toString().contains("java.util.Date")){
 							@SuppressWarnings("deprecation")
-							Date date = new Date(Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString()));
+							Date date = new Date();
+							date.setYear(Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString()));
+							date.setMonth((Integer.valueOf(((JFormattedTextField) components[i+1]).getValue().toString()))-1);
+							date.setDate(Integer.valueOf(((JFormattedTextField) components[i+2]).getValue().toString()));
+							System.out.println(date.toString());
 							i = i+2;
 							Method method = getMethod(classesweuse[counter], c);
 					        method.invoke(originalObject, date);
 							counter++;
+							checkIfComponetsIsAtEnd = false;
 						}
 						else if(classesweuse[counter].getGenericType().toString().contains("GregorianCalendar")){
 							GregorianCalendar calendar = new GregorianCalendar(Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString()), Integer.valueOf(((JFormattedTextField) components[i]).getValue().toString()));
@@ -100,6 +113,7 @@ public class ObjectUpdater {
 							Method method = getMethod(classesweuse[counter], c);
 					        method.invoke(originalObject, calendar);
 							counter++;
+							checkIfComponetsIsAtEnd = false;
 						}
 					}
 					else{
@@ -166,7 +180,6 @@ public class ObjectUpdater {
 								System.out.println(newObject.get(0));
 								counter++;
 								i = (Integer) newObject.remove(0);
-								System.out.println(i);
 							} catch (InstantiationException e) {
 								 //TODO Auto-generated catch block
 								e.printStackTrace();
@@ -184,7 +197,6 @@ public class ObjectUpdater {
 				break;
 			}
 		}
-		System.out.println("end of file");
 		ArrayList<Object> list = new ArrayList<Object>();
 		list.add(originalObject);
 		list.add(Integer.valueOf(i));
