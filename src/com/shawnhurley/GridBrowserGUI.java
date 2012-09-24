@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Properties;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -73,6 +75,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	private JButton invalidateButton;
 	private JButton getButton;
 	
+	private Properties props;
 	//Formats to format and parse numbers
 	//private NumberFormat integerFormat = NumberFormat.getIntegerInstance();
 	
@@ -111,15 +114,15 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 		add(requiredInputPanel,c);
 		
 	}
-	//private void loadProps() {
-		//props = new Properties();
-		//InputStream in = props.getClass().getResourceAsStream(propsFileName);
-		//try {
-			//props.load(in);
-		//} catch (IOException e) {
-			//e.printStackTrace();
-		//}
-	//}
+	private void loadProps() {
+		props = new Properties();
+		InputStream in = props.getClass().getResourceAsStream(propsFileName);
+		try {
+			props.load(in);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	private void fillYourEntryTitlePanel(){
 		/*
