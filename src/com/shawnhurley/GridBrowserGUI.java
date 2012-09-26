@@ -116,7 +116,7 @@ public class GridBrowserGUI extends JPanel implements ActionListener{
 	}
 	private void loadProps() {
 		props = new Properties();
-		InputStream in = props.getClass().getResourceAsStream(propsFileName);
+		InputStream in = props.getClass().getResourceAsStream("config.properties");
 		try {
 			props.load(in);
 		} catch (IOException e) {
